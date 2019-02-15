@@ -29,16 +29,16 @@ nav {
     <div class="container">
         <nav>
             <ul>
-                <li>
+                <!-- <li>
                     <router-link to="/split">Split</router-link>
-                </li>
+                </li>-->
                 <li>
                     <router-link to="/layout">Layout</router-link>
                 </li>
                 <li>
                     <router-link to="/affix">Affix</router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>
                 <li>
@@ -184,7 +184,7 @@ nav {
                 </li>
                 <li>
                     <router-link to="/drawer">Drawer</router-link>
-                </li>
+                </li>-->
             </ul>
         </nav>
         <router-view></router-view>

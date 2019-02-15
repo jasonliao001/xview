@@ -4,7 +4,7 @@
 <script>
     export default {
         name: 'etable',
-        data () {
+        data() {
             return {
                 columns2: [
                     {
@@ -45,18 +45,26 @@
                         width: 120,
                         render: (h, params) => {
                             return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, '编辑')
+                                h(
+                                    'Button',
+                                    {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        }
+                                    },
+                                    '查看'
+                                ),
+                                h(
+                                    'Button',
+                                    {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        }
+                                    },
+                                    '编辑'
+                                )
                             ]);
                         }
                     }
@@ -95,10 +103,8 @@
                         zip: 100000
                     }
                 ]
-            }
+            };
         },
-        mounted () {
-            console.log(1)
-        }
-    }
+        mounted() {}
+    };
 </script>

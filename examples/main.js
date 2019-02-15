@@ -24,6 +24,10 @@ const router = new VueRouter({
         {
             path: '/affix',
             component: resolve => require(['./routers/affix.vue'], resolve)
+        },
+        {
+            path: '/layout',
+            component: resolve => require(['./routers/layout.vue'], resolve)
         }
     ]
 });

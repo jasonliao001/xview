@@ -1,21 +1,40 @@
 import Affix from './components/affix';
 import locale from './locale/index';
-
+import Layout from './components/layout';
+import Content from './components/content';
+import Button from './components/button';
+import Footer from './components/footer';
+import Header from './components/header';
+import Sider from './components/sider';
+import Menu from './components/menu';
+import Icon from './components/icon';
 const components = {
-    Affix
+    Affix,
+    Layout: Layout,
+    Button,
+    ButtonGroup: Button.Group,
+    Content,
+    Sider: Sider,
+    Menu,
+    MenuGroup: Menu.Group,
+    MenuItem: Menu.Item,
+    Header: Header,
+    Footer: Footer,
+    Icon,
+    Submenu: Menu.Sub
 };
 
 const iview = {
-    ...components
-    // iButton: Button,
+    ...components,
+    iButton: Button,
     // iCircle: Circle,
     // iCol: Col,
-    // iContent: Content,
+    iContent: Content,
     // iForm: Form,
-    // iFooter: Footer,
-    // iHeader: Header,
+    iFooter: Footer,
+    iHeader: Header,
     // iInput: Input,
-    // iMenu: Menu,
+    iMenu: Menu
     // iOption: Option,
     // iProgress: Progress,
     // iSelect: Select,

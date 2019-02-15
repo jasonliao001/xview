@@ -1,4 +1,5 @@
 <template>
+    <!-- 图钉 -->
     <div>
         <div ref="point" :class="classes" :style="styles">
             <slot></slot>
@@ -7,19 +8,22 @@
     </div>
 </template>
 <script>
+    // 知识点链接
+    // https://wangdoc.com/javascript/dom/element.html
+    // https://www.zhangxinxu.com/wordpress/2011/09/cssom%E8%A7%86%E5%9B%BE%E6%A8%A1%E5%BC%8Fcssom-view-module%E7%9B%B8%E5%85%B3%E6%95%B4%E7%90%86%E4%B8%8E%E4%BB%8B%E7%BB%8D/
     import { on, off } from '../../utils/dom';
     const prefixCls = 'ivu-affix';
 
     function getScroll(target, top) {
+        // 页面滚动的距离，兼容性处理
         const prop = top ? 'pageYOffset' : 'pageXOffset';
         const method = top ? 'scrollTop' : 'scrollLeft';
 
         let ret = target[prop];
-
+        // 对于不支持的pageYOffset typeof window.pageYOffset === undefined
         if (typeof ret !== 'number') {
             ret = window.document.documentElement[method];
         }
-
         return ret;
     }
 
@@ -76,6 +80,7 @@
             }
         },
         mounted() {
+            // 可以加上个节流函数
             //            window.addEventListener('scroll', this.handleScroll, false);
             //            window.addEventListener('resize', this.handleScroll, false);
             on(window, 'scroll', this.handleScroll);
@@ -88,6 +93,7 @@
             off(window, 'resize', this.handleScroll);
         },
         methods: {
+            // 在滚动的时候时刻去设置距离顶部的高度
             handleScroll() {
                 const affix = this.affix;
                 const scrollTop = getScroll(window, true);
