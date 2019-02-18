@@ -4,15 +4,17 @@
             <slot name="title"></slot>
             <Icon type="ios-arrow-down" :class="[prefixCls + '-submenu-title-icon']"></Icon>
         </div>
+        <!-- 此处结构是在mode为"vertical"||"horizontal" drop是不一样 -->
         <collapse-transition v-if="mode === 'vertical'">
-            <ul :class="[prefixCls]" v-show="opened"><slot></slot></ul>
+            <ul :class="[prefixCls]" v-show="opened">
+                <slot></slot>
+            </ul>
         </collapse-transition>
         <transition name="slide-up" v-else>
-            <Drop
-                v-show="opened"
-                placement="bottom"
-                ref="drop"
-                :style="dropStyle"><ul :class="[prefixCls + '-drop-list']"><slot></slot></ul>
+            <Drop v-show="opened" placement="bottom" ref="drop" :style="dropStyle">
+                <ul :class="[prefixCls + '-drop-list']">
+                    <slot></slot>
+                </ul>
             </Drop>
         </transition>
     </li>
@@ -29,7 +31,7 @@
 
     export default {
         name: 'Submenu',
-        mixins: [ Emitter, mixin ],
+        mixins: [Emitter, mixin],
         components: { Icon, Drop, CollapseTransition },
         props: {
             name: {
@@ -41,7 +43,7 @@
                 default: false
             }
         },
-        data () {
+        data() {
             return {
                 prefixCls: prefixCls,
                 active: false,
@@ -50,7 +52,7 @@
             };
         },
         computed: {
-            classes () {
+            classes() {
                 return [
                     `${prefixCls}-submenu`,
                     {
@@ -62,23 +64,26 @@
                     }
                 ];
             },
-            accordion () {
+            accordion() {
                 return this.menu.accordion;
             },
-            dropStyle () {
+            dropStyle() {
                 let style = {};
 
                 if (this.dropWidth) style.minWidth = `${this.dropWidth}px`;
                 return style;
             },
-            titleStyle () {
-                return this.hasParentSubmenu && this.mode !== 'horizontal' ? {
-                    paddingLeft: 43 + (this.parentSubmenuNum - 1) * 24 + 'px'
-                } : {};
+            titleStyle() {
+                return this.hasParentSubmenu && this.mode !== 'horizontal'
+                    ? {
+                          paddingLeft: 43 + (this.parentSubmenuNum - 1) * 24 + 'px'
+                      }
+                    : {};
             }
         },
         methods: {
-            handleMouseenter () {
+            // Mouse事件只需要考虑的是mode=horizontal
+            handleMouseenter() {
                 if (this.disabled) return;
                 if (this.mode === 'vertical') return;
 
@@ -88,7 +93,7 @@
                     this.opened = true;
                 }, 250);
             },
-            handleMouseleave () {
+            handleMouseleave() {
                 if (this.disabled) return;
                 if (this.mode === 'vertical') return;
 
@@ -98,9 +103,11 @@
                     this.opened = false;
                 }, 150);
             },
-            handleClick () {
+            // click 只需要考虑在mode = vertical
+            handleClick() {
                 if (this.disabled) return;
                 if (this.mode === 'horizontal') return;
+
                 const opened = this.opened;
                 if (this.accordion) {
                     this.$parent.$children.forEach(item => {
@@ -112,12 +119,12 @@
             }
         },
         watch: {
-            mode (val) {
+            mode(val) {
                 if (val === 'horizontal') {
                     this.$refs.drop.update();
                 }
             },
-            opened (val) {
+            opened(val) {
                 if (this.mode === 'vertical') return;
                 if (val) {
                     // set drop a width to fixed when menu has fixed position
@@ -128,17 +135,19 @@
                 }
             }
         },
-        mounted () {
-            this.$on('on-menu-item-select', (name) => {
+        mounted() {
+            this.$on('on-menu-item-select', name => {
                 if (this.mode === 'horizontal') this.opened = false;
                 this.dispatch('Menu', 'on-menu-item-select', name);
                 return true;
             });
-            this.$on('on-update-active-name', (status) => {
+            this.$on('on-update-active-name', status => {
+                // 还是Submenu，继续传递
                 if (findComponentUpward(this, 'Submenu')) this.dispatch('Submenu', 'on-update-active-name', status);
-                if (findComponentsDownward(this, 'Submenu')) findComponentsDownward(this, 'Submenu').forEach(item => {
-                    item.active = false;
-                });
+                if (findComponentsDownward(this, 'Submenu'))
+                    findComponentsDownward(this, 'Submenu').forEach(item => {
+                        item.active = false;
+                    });
                 this.active = status;
             });
         }

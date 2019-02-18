@@ -1,5 +1,6 @@
 import { addClass, removeClass } from '../../utils/assist';
-
+// 可复用的动画组件，其中涉及到无状态组件，具体可以查看下链接
+// https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6
 const Transition = {
     beforeEnter(el) {
         addClass(el, 'collapse-transition');

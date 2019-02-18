@@ -38,6 +38,9 @@ nav {
                 <li>
                     <router-link to="/affix">Affix</router-link>
                 </li>
+                <li>
+                    <router-link to="/menu">Menu</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>
@@ -119,9 +122,7 @@ nav {
                 <li>
                     <router-link to="/breadcrumb">Breadcrumb</router-link>
                 </li>
-                <li>
-                    <router-link to="/menu">Menu</router-link>
-                </li>
+               
                 <li>
                     <router-link to="/spin">Spin</router-link>
                 </li>

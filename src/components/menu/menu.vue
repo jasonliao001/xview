@@ -1,5 +1,7 @@
 <template>
-    <ul :class="classes" :style="styles"><slot></slot></ul>
+    <ul :class="classes" :style="styles">
+        <slot></slot>
+    </ul>
 </template>
 <script>
     import { oneOf, findComponentsDownward, findComponentsUpward } from '../../utils/assist';
@@ -9,16 +11,16 @@
 
     export default {
         name: 'Menu',
-        mixins: [ Emitter ],
+        mixins: [Emitter],
         props: {
             mode: {
-                validator (value) {
+                validator(value) {
                     return oneOf(value, ['horizontal', 'vertical']);
                 },
                 default: 'vertical'
             },
             theme: {
-                validator (value) {
+                validator(value) {
                     return oneOf(value, ['light', 'dark', 'primary']);
                 },
                 default: 'light'
@@ -28,7 +30,7 @@
             },
             openNames: {
                 type: Array,
-                default () {
+                default() {
                     return [];
                 }
             },
@@ -41,14 +43,14 @@
                 default: '240px'
             }
         },
-        data () {
+        data() {
             return {
                 currentActiveName: this.activeName,
                 openedNames: []
             };
         },
         computed: {
-            classes () {
+            classes() {
                 let theme = this.theme;
                 if (this.mode === 'vertical' && this.theme === 'primary') theme = 'light';
 
@@ -60,7 +62,7 @@
                     }
                 ];
             },
-            styles () {
+            styles() {
                 let style = {};
 
                 if (this.mode === 'vertical') style.width = this.width;
@@ -69,19 +71,22 @@
             }
         },
         methods: {
-            updateActiveName () {
+            // 更新选中Item
+            updateActiveName() {
                 if (this.currentActiveName === undefined) {
                     this.currentActiveName = -1;
                 }
                 this.broadcast('Submenu', 'on-update-active-name', false);
                 this.broadcast('MenuItem', 'on-update-active-name', this.currentActiveName);
             },
-            updateOpenKeys (name) {
+            // 随时更行Name
+            updateOpenKeys(name) {
                 let names = [...this.openedNames];
                 const index = names.indexOf(name);
-                if (this.accordion) findComponentsDownward(this, 'Submenu').forEach(item => {
-                    item.opened = false;
-                });
+                if (this.accordion)
+                    findComponentsDownward(this, 'Submenu').forEach(item => {
+                        item.opened = false;
+                    });
                 if (index >= 0) {
                     let currentSubmenu = null;
                     findComponentsDownward(this, 'Submenu').forEach(item => {
@@ -114,11 +119,14 @@
                         });
                     }
                 }
-                let openedNames = findComponentsDownward(this, 'Submenu').filter(item => item.opened).map(item => item.name);
+                let openedNames = findComponentsDownward(this, 'Submenu')
+                    .filter(item => item.opened)
+                    .map(item => item.name);
                 this.openedNames = [...openedNames];
                 this.$emit('on-open-change', openedNames);
             },
-            updateOpened () {
+            // 更新展开状态
+            updateOpened() {
                 const items = findComponentsDownward(this, 'Submenu');
 
                 if (items.length) {
@@ -128,27 +136,27 @@
                     });
                 }
             },
-            handleEmitSelectEvent (name) {
+            handleEmitSelectEvent(name) {
                 this.$emit('on-select', name);
             }
         },
-        mounted () {
+        mounted() {
             this.updateActiveName();
             this.openedNames = [...this.openNames];
             this.updateOpened();
-            this.$on('on-menu-item-select', (name) => {
+            this.$on('on-menu-item-select', name => {
                 this.currentActiveName = name;
                 this.$emit('on-select', name);
             });
         },
         watch: {
-            openNames (names) {
+            openNames(names) {
                 this.openedNames = names;
             },
-            activeName (val) {
+            activeName(val) {
                 this.currentActiveName = val;
             },
-            currentActiveName () {
+            currentActiveName() {
                 this.updateActiveName();
             }
         }

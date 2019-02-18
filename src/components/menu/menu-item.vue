@@ -7,8 +7,13 @@
         @click.exact="handleClickItem($event, false)"
         @click.ctrl="handleClickItem($event, true)"
         @click.meta="handleClickItem($event, true)"
-        :style="itemStyle"><slot></slot></a>
-    <li v-else :class="classes" @click.stop="handleClickItem" :style="itemStyle"><slot></slot></li>
+        :style="itemStyle"
+    >
+        <slot></slot>
+    </a>
+    <li v-else :class="classes" @click.stop="handleClickItem" :style="itemStyle">
+        <slot></slot>
+    </li>
 </template>
 <script>
     import Emitter from '../../mixins/emitter';
@@ -20,7 +25,7 @@
 
     export default {
         name: 'MenuItem',
-        mixins: [ Emitter, mixin, mixinsLink ],
+        mixins: [Emitter, mixin, mixinsLink],
         props: {
             name: {
                 type: [String, Number],
@@ -29,15 +34,15 @@
             disabled: {
                 type: Boolean,
                 default: false
-            },
+            }
         },
-        data () {
+        data() {
             return {
                 active: false
             };
         },
         computed: {
-            classes () {
+            classes() {
                 return [
                     `${prefixCls}-item`,
                     {
@@ -47,14 +52,16 @@
                     }
                 ];
             },
-            itemStyle () {
-                return this.hasParentSubmenu && this.mode !== 'horizontal' ? {
-                    paddingLeft: 43 + (this.parentSubmenuNum - 1) * 24 + 'px'
-                } : {};
+            itemStyle() {
+                return this.hasParentSubmenu && this.mode !== 'horizontal'
+                    ? {
+                          paddingLeft: 43 + (this.parentSubmenuNum - 1) * 24 + 'px'
+                      }
+                    : {};
             }
         },
         methods: {
-            handleClickItem (event, new_window = false) {
+            handleClickItem(event, new_window = false) {
                 if (this.disabled) return;
 
                 if (new_window || this.target === '_blank') {
@@ -75,10 +82,11 @@
                 }
             }
         },
-        mounted () {
-            this.$on('on-update-active-name', (name) => {
+        mounted() {
+            this.$on('on-update-active-name', name => {
                 if (this.name === name) {
                     this.active = true;
+                    // SubMenu
                     this.dispatch('Submenu', 'on-update-active-name', name);
                 } else {
                     this.active = false;

@@ -7,7 +7,7 @@
                 collapsed-width="0"
                 hide-trigger
                 breakpoint="sm"
-                @on-collapse="changed"
+                @on-collapse="change"
                 collapsible
                 ref="side"
                 width="200"
@@ -56,7 +56,7 @@
                 this.$refs.side.toggleCollapse();
             },
             change() {
-                this.isCollapsed = !this.isCollapsed;
+                // this.isCollapsed = !this.isCollapsed;
             }
         },
         watch: {

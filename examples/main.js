@@ -28,6 +28,10 @@ const router = new VueRouter({
         {
             path: '/layout',
             component: resolve => require(['./routers/layout.vue'], resolve)
+        },
+        {
+            path: '/menu',
+            component: resolve => require(['./routers/menu.vue'], resolve)
         }
     ]
 });

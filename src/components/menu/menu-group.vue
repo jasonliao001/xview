@@ -1,7 +1,9 @@
 <template>
     <li :class="[prefixCls + '-item-group']">
         <div :class="[prefixCls + '-item-group-title']" :style="groupStyle">{{ title }}</div>
-        <ul><slot></slot></ul>
+        <ul>
+            <slot></slot>
+        </ul>
     </li>
 </template>
 <script>
@@ -10,23 +12,25 @@
 
     export default {
         name: 'MenuGroup',
-        mixins: [ mixin ],
+        mixins: [mixin],
         props: {
             title: {
                 type: String,
                 default: ''
             }
         },
-        data () {
+        data() {
             return {
                 prefixCls: prefixCls
             };
         },
         computed: {
-            groupStyle () {
-                return this.hasParentSubmenu && this.mode !== 'horizontal' ? {
-                    paddingLeft: 43 + (this.parentSubmenuNum - 1) * 28 + 'px'
-                } : {};
+            groupStyle() {
+                return this.hasParentSubmenu && this.mode !== 'horizontal'
+                    ? {
+                          paddingLeft: 43 + (this.parentSubmenuNum - 1) * 28 + 'px'
+                      }
+                    : {};
             }
         }
     };
