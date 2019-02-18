@@ -8,6 +8,8 @@ import Header from './components/header';
 import Sider from './components/sider';
 import Menu from './components/menu';
 import Icon from './components/icon';
+import Input from './components/input';
+import { Select, Option, OptionGroup } from './components/select';
 const components = {
     Affix,
     Layout: Layout,
@@ -21,7 +23,11 @@ const components = {
     Header: Header,
     Footer: Footer,
     Icon,
-    Submenu: Menu.Sub
+    Submenu: Menu.Sub,
+    Option: Option,
+    OptionGroup,
+    Select,
+    Input
 };
 
 const iview = {
@@ -33,11 +39,11 @@ const iview = {
     // iForm: Form,
     iFooter: Footer,
     iHeader: Header,
-    // iInput: Input,
-    iMenu: Menu
-    // iOption: Option,
+    iInput: Input,
+    iMenu: Menu,
+    iOption: Option,
     // iProgress: Progress,
-    // iSelect: Select,
+    iSelect: Select
     // iSwitch: Switch,
     // iTable: Table,
     // iTime: Time

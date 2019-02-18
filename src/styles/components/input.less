@@ -1,8 +1,8 @@
-@input-prefix-cls: ~"@{css-prefix}input";
+@input-prefix-cls: ~'@{css-prefix}input';
 
 .@{input-prefix-cls} {
     .input;
-    &-wrapper{
+    &-wrapper {
         display: inline-block;
         width: 100%;
         position: relative;
@@ -22,37 +22,37 @@
         right: 0;
         z-index: 3;
     }
-    &-hide-icon &-icon{
+    &-hide-icon &-icon {
         display: none;
     }
-    &-icon-validate{
-        display: none;
-    }
-
-    &-icon-clear{
+    &-icon-validate {
         display: none;
     }
 
-    &-wrapper:hover{
-        .@{input-prefix-cls}-icon-clear{
+    &-icon-clear {
+        display: none;
+    }
+
+    &-wrapper:hover {
+        .@{input-prefix-cls}-icon-clear {
             display: inline-block;
         }
     }
 
-    &-icon-normal + &{
+    &-icon-normal + & {
         padding-right: 32px;
     }
     // #554
-    &-hide-icon &-icon-normal + &{
+    &-hide-icon &-icon-normal + & {
         padding-right: @input-padding-horizontal;
     }
 
-    &-wrapper-large &-icon{
+    &-wrapper-large &-icon {
         font-size: 18px;
         height: @input-height-large;
         line-height: @input-height-large;
     }
-    &-wrapper-small &-icon{
+    &-wrapper-small &-icon {
         width: 24px;
         font-size: 14px;
         height: @input-height-small;
@@ -64,7 +64,8 @@
     }
 
     // prefix & suffix
-    &-prefix, &-suffix{
+    &-prefix,
+    &-suffix {
         width: 32px;
         height: 100%;
         text-align: center;
@@ -72,38 +73,40 @@
         left: 0;
         top: 0;
         z-index: 1;
-        i{
+        i {
             font-size: 16px;
             line-height: @input-height-base;
             color: @subsidiary-color;
         }
     }
-    &-suffix{
+    &-suffix {
         left: auto;
         right: 0;
     }
-    &-wrapper-small &-prefix, &-wrapper-small &-suffix{
-        i{
+    &-wrapper-small &-prefix,
+    &-wrapper-small &-suffix {
+        i {
             font-size: 14px;
             line-height: @input-height-small;
         }
     }
-    &-wrapper-large &-prefix, &-wrapper-large &-suffix{
-        i{
+    &-wrapper-large &-prefix,
+    &-wrapper-large &-suffix {
+        i {
             font-size: 18px;
             line-height: @input-height-large;
         }
     }
 
-    &-with-prefix{
+    &-with-prefix {
         padding-left: 32px;
     }
-    &-with-suffix{
+    &-with-suffix {
         padding-right: 32px;
     }
 
     // search
-    &-search{
+    &-search {
         cursor: pointer;
         padding: 0 16px !important;
         background: @primary-color !important;
@@ -113,28 +116,28 @@
         position: relative;
         z-index: 2;
 
-        i{
+        i {
             font-size: 16px;
         }
 
-        &:hover{
+        &:hover {
             background: tint(@primary-color, 20%) !important;
             border-color: tint(@primary-color, 20%) !important;
         }
-        &:active{
+        &:active {
             background: shade(@primary-color, 5%) !important;
             border-color: shade(@primary-color, 5%) !important;
         }
 
-        &-icon{
+        &-icon {
             cursor: pointer;
             transition: color @transition-time @ease-in-out;
-            &:hover{
+            &:hover {
                 color: inherit;
             }
         }
 
-        &:before{
+        &:before {
             content: '';
             display: block;
             width: 1px;
@@ -145,20 +148,20 @@
             background: inherit;
         }
     }
-    &-wrapper-small &-search{
+    &-wrapper-small &-search {
         padding: 0 12px !important;
-        i{
+        i {
             font-size: 14px;
         }
     }
-    &-wrapper-large &-search{
+    &-wrapper-large &-search {
         padding: 0 20px !important;
-        i{
+        i {
             font-size: 18px;
         }
     }
-    &-with-search{
-        &:hover{
+    &-with-search {
+        &:hover {
             .@{input-prefix-cls} {
                 border-color: tint(@primary-color, 20%);
             }
@@ -166,35 +169,35 @@
     }
 }
 
-.@{input-prefix-cls}-group{
-    .input-group(~"@{input-prefix-cls}");
+.@{input-prefix-cls}-group {
+    .input-group(~'@{input-prefix-cls}');
 }
 
-.@{form-item-prefix-cls}-error{
-    .@{input-prefix-cls}{
+.@{form-item-prefix-cls}-error {
+    .@{input-prefix-cls} {
         .input-error;
-        &-icon{
+        &-icon {
             color: @error-color;
         }
     }
-    .@{input-prefix-cls}-group{
+    .@{input-prefix-cls}-group {
         .input-group-error;
     }
     .@{transfer-prefix-cls} {
         .@{input-prefix-cls} {
             .input;
-            &-icon{
+            &-icon {
                 color: @subsidiary-color;
             }
         }
     }
 }
-.@{form-item-prefix-cls}-validating{
-    .@{input-prefix-cls}{
-        &-icon-validate{
+.@{form-item-prefix-cls}-validating {
+    .@{input-prefix-cls} {
+        &-icon-validate {
             display: inline-block;
         }
-        &-icon + .@{input-prefix-cls}{
+        &-icon + .@{input-prefix-cls} {
             padding-right: 32px;
         }
     }

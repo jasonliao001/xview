@@ -13,7 +13,7 @@
 </template>
 <script>
     export default {
-        data () {
+        data() {
             return {
                 cityList: [
                     {
@@ -42,7 +42,7 @@
                     }
                 ],
                 model10: ['New York', 'London']
-            }
+            };
         }
-    }
+    };
 </script>

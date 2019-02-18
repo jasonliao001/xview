@@ -12,15 +12,15 @@
         name: 'ButtonGroup',
         props: {
             size: {
-                validator (value) {
+                validator(value) {
                     return oneOf(value, ['small', 'large', 'default']);
                 },
-                default () {
+                default() {
                     return !this.$IVIEW || this.$IVIEW.size === '' ? 'default' : this.$IVIEW.size;
                 }
             },
             shape: {
-                validator (value) {
+                validator(value) {
                     return oneOf(value, ['circle', 'circle-outline']);
                 }
             },
@@ -30,7 +30,7 @@
             }
         },
         computed: {
-            classes () {
+            classes() {
                 return [
                     `${prefixCls}`,
                     {

@@ -1,18 +1,20 @@
 <template>
-     <div :class="wrapClasses"><slot></slot></div>
+    <div :class="wrapClasses">
+        <slot></slot>
+    </div>
 </template>
 <script>
     const prefixCls = 'ivu-layout';
 
     export default {
         name: 'Layout',
-        data () {
+        data() {
             return {
                 hasSider: false
             };
         },
         computed: {
-            wrapClasses () {
+            wrapClasses() {
                 return [
                     `${prefixCls}`,
                     {
@@ -22,13 +24,13 @@
             }
         },
         methods: {
-            findSider () {
+            findSider() {
                 return this.$children.some(child => {
-                    return child.$options.name === 'Sider'; 
+                    return child.$options.name === 'Sider';
                 });
             }
         },
-        mounted () {
+        mounted() {
             this.hasSider = this.findSider();
         }
     };

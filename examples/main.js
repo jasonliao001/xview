@@ -32,6 +32,18 @@ const router = new VueRouter({
         {
             path: '/menu',
             component: resolve => require(['./routers/menu.vue'], resolve)
+        },
+        {
+            path: '/button',
+            component: resolve => require(['./routers/button.vue'], resolve)
+        },
+        {
+            path: '/select',
+            component: resolve => require(['./routers/select.vue'], resolve)
+        },
+        {
+            path: '/input',
+            component: resolve => require(['./routers/input.vue'], resolve)
         }
     ]
 });
