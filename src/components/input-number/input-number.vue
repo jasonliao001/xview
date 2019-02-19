@@ -1,0 +1,233 @@
+<template>
+    <div :class="wrapClasses">
+        <div :class="handlerClasses">
+            <a @click="up" :class="upClasses">
+                <span :class="innerUpClasses" @click="preventDefault"></span>
+            </a>
+            <a @click="down" :class="downClasses">
+                <span :class="innerDownClasses" @click="preventDefault"></span>
+            </a>
+        </div>
+        <div :class="inputWrapClasses">
+            <input
+                :id="elementId"
+                :class="inputClasses"
+                :disabled="disabled"
+                autocomplete="off"
+                spellcheck="false"
+                :autofocus="autofocus"
+                @focus="focus"
+                @blur="blur"
+                @keydown.stop="keyDown"
+                @input="change"
+                @mouseup="preventDefault"
+                @change="change"
+                :readonly="readonly || !editable"
+                :name="name"
+                :value="formatterValue"
+                :placeholder="placeholder"
+            >
+        </div>
+    </div>
+</template>
+<script>
+    // 主要涉及的知识点还是Number类型的数据转换
+    // https://wangdoc.com/javascript/types/number.html
+    import { oneOf, findComponentUpward } from '../../utils/assist';
+    import Emitter from '../../mixins/emitter';
+    const prefixCls = 'ivu-input-number';
+    const iconPrefixCls = 'ivu-icon';
+
+    function addNum(num1, num2) {
+        let sq1, sq2, m;
+        try {
+            sq1 = num1.toString().split('.')[1].length;
+        } catch (e) {
+            sq1 = 0;
+        }
+        try {
+            sq2 = num2.toString().split('.')[1].length;
+        } catch (e) {
+            sq2 = 0;
+        }
+        //        if (sq1 === 0 || sq2 === 0) {
+        //            return num1 + num2;
+        //        } else {
+        //            m = Math.pow(10, Math.max(sq1, sq2));
+        //            return (num1 * m + num2 * m) / m;
+        //        }
+        m = Math.pow(10, Math.max(sq1, sq2));
+        return (Math.round(num1 * m) + Math.round(num2 * m)) / m;
+    }
+    export default {
+        name: 'InputNumber',
+        mixins: [Emitter],
+        props: {
+            max: {
+                type: Number,
+                default: Infinity
+            },
+            min: {
+                type: Number,
+                default: -Infinity
+            },
+            step: {
+                type: Number,
+                default: 1
+            },
+            activeChange: {
+                type: Boolean,
+                default: true
+            },
+            value: {
+                type: Number,
+                default: 1
+            },
+            size: {
+                validator(value) {
+                    return oneOf(value, ['small', 'large', 'default']);
+                },
+                default() {
+                    return !this.$IVIEW || this.$IVIEW.size === '' ? 'default' : this.$IVIEW.size;
+                }
+            },
+            disabled: {
+                type: Boolean,
+                default: false
+            },
+            autofocus: {
+                type: Boolean,
+                default: false
+            },
+            readonly: {
+                type: Boolean,
+                default: false
+            },
+            editable: {
+                type: Boolean,
+                default: true
+            },
+            name: {
+                type: String
+            },
+            precision: {
+                type: Number
+            },
+            elementId: {
+                type: String
+            },
+            formatter: {
+                type: Function
+            },
+            parser: {
+                type: Function
+            },
+            placeholder: {
+                type: String,
+                default: ''
+            }
+        },
+        computed: {
+            wrapClasses() {
+                return [
+                    `${prefixCls}`,
+                    {
+                        [`${prefixCls}-${this.size}`]: !!this.size,
+                        [`${prefixCls}-disabled`]: this.disabled,
+                        [`${prefixCls}-focused`]: this.focused
+                    }
+                ];
+            },
+            handlerClasses() {
+                return `${prefixCls}-handler-wrap`;
+            },
+            upClasses() {
+                return [
+                    `${prefixCls}-handler`,
+                    `${prefixCls}-handler-up`,
+                    {
+                        [`${prefixCls}-handler-up-disabled`]: this.upDisabled
+                    }
+                ];
+            },
+            innerUpClasses() {
+                return `${prefixCls}-handler-up-inner ${iconPrefixCls} ${iconPrefixCls}-ios-arrow-up`;
+            },
+            downClasses() {
+                return [
+                    `${prefixCls}-handler`,
+                    `${prefixCls}-handler-down`,
+                    {
+                        [`${prefixCls}-handler-down-disabled`]: this.downDisabled
+                    }
+                ];
+            },
+            innerDownClasses() {
+                return `${prefixCls}-handler-down-inner ${iconPrefixCls} ${iconPrefixCls}-ios-arrow-down`;
+            },
+            inputWrapClasses() {
+                return `${prefixCls}-input-wrap`;
+            },
+            inputClasses() {
+                return `${prefixCls}-input`;
+            },
+            precisionValue() {
+                // can not display 1.0
+                if (!this.currentValue) return this.currentValue;
+                return this.precision ? this.currentValue.toFixed(this.precision) : this.currentValue;
+            },
+            formatterValue() {
+                if (this.formatter && this.precisionValue !== null) {
+                    return this.formatter(this.precisionValue);
+                } else {
+                    return this.precisionValue;
+                }
+            }
+        },
+        data() {
+            return {
+                focused: false,
+                upDisabled: false,
+                downDisabled: false,
+                currentValue: this.value
+            };
+        },
+        methods: {
+            preventDefault(e) {
+                e.preventDefault();
+            },
+            up(e) {
+                const targetVal = Number(e.target.value);
+                if (this.upDisabled && isNaN(targetVal)) {
+                    return false;
+                }
+                this.changeStep('up', e);
+            },
+            down(e) {
+                const targetVal = Number(e.target.value);
+                if (this.downDisabled && isNaN(targetVal)) {
+                    return false;
+                }
+                this.changeStep('down', e);
+            },
+            changeStep(type, e) {
+                if (this.disabled || this.readonly) {
+                    return false;
+                }
+                const targetVal = Number(e.target.value);
+
+                let val = Number(this.currentValue);
+                const step = Number(this.step);
+                if (isNaN(val)) {
+                    return false;
+                }
+                if (!isNaN(targetVal)) {
+                    if (type === 'up') {
+                        if (addNum(targetVal, step) < this.max) {
+                        }
+                    }
+                }
+            }
+        }
+    };
+</script>
