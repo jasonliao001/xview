@@ -9,6 +9,12 @@ import Sider from './components/sider';
 import Menu from './components/menu';
 import Icon from './components/icon';
 import Input from './components/input';
+import Radio from './components/radio';
+import Checkbox from './components/checkbox';
+import Cell from './components/cell';
+import Badge from './components/badge';
+import Card from './components/Card';
+import Switch from './components/switch';
 import { Select, Option, OptionGroup } from './components/select';
 const components = {
     Affix,
@@ -27,7 +33,16 @@ const components = {
     Option: Option,
     OptionGroup,
     Select,
-    Input
+    Input,
+    Radio,
+    Badge,
+    RadioGroup: Radio.Group,
+    Checkbox,
+    CheckboxGroup: Checkbox.Group,
+    Cell,
+    Card,
+    // Switch,
+    CellGroup: Cell.Group
 };
 
 const iview = {
@@ -43,8 +58,8 @@ const iview = {
     iMenu: Menu,
     iOption: Option,
     // iProgress: Progress,
-    iSelect: Select
-    // iSwitch: Switch,
+    iSelect: Select,
+    iSwitch: Switch
     // iTable: Table,
     // iTime: Time
 };

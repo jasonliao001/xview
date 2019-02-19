@@ -3,7 +3,8 @@
         <Radio size="large" v-model="single">Radio</Radio>
         <Radio size="default" v-model="single">Radio</Radio>
         <Radio size="small" v-model="single">Radio</Radio>
-        <br><br>
+        <br>
+        <br>
         <Radio-group v-model="phone">
             <Radio label="apple">
                 <Icon type="social-apple"></Icon>
@@ -40,15 +41,13 @@
 </template>
 <script>
     export default {
-        data () {
+        data() {
             return {
                 single: true,
-                phone: '',
-                button2: '北京',
+                phone: 'apple',
+                button2: '北京'
             };
         },
-        methods: {
-
-        }
+        methods: {}
     };
 </script>

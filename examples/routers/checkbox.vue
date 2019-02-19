@@ -1,17 +1,7 @@
 <template>
     <div>
-        <Checkbox
-            :indeterminate="true"
-            :value="false"
-            size="large">全选</Checkbox>
-        <Checkbox
-                :indeterminate="true"
-                :value="false"
-                size="default">全选</Checkbox>
-        <Checkbox
-                :indeterminate="true"
-                :value="false"
-                size="small">全选</Checkbox>
+        <Checkbox :indeterminate="true" :value="false" size="large">全选</Checkbox>
+
         <div>
             <Checkbox size="large" true-value="true" false-value="false" v-model="testValue1">Apple</Checkbox>
             <Checkbox true-value="true" false-value="false" v-model="testValue1" disabled>Apple</Checkbox>
@@ -30,7 +20,7 @@
 </template>
 <script>
     export default {
-        data () {
+        data() {
             return {
                 social: ['facebook', 'github'],
                 fruit: ['苹果'],
@@ -39,7 +29,7 @@
                 testValue2: null
             };
         },
-        mounted () {
+        mounted() {
             setTimeout(() => {
                 this.tags = [
                     {

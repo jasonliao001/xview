@@ -1,16 +1,17 @@
+
 <style scoped>
-    .demo-badge{
-        width: 42px;
-        height: 42px;
-        background: #eee;
-        border-radius: 6px;
-        display: inline-block;
-    }
+.demo-badge {
+    width: 42px;
+    height: 42px;
+    background: #eee;
+    border-radius: 6px;
+    display: inline-block;
+}
 </style>
 <style>
-    .demo-badge-alone{
-        background: #5cb85c !important;
-    }
+.demo-badge-alone {
+    background: #5cb85c !important;
+}
 </style>
 <template>
     <div>
@@ -21,33 +22,36 @@
             <a href="#" class="demo-badge"></a>
         </Badge>
         <Button @click="setCount">set count</Button>
-        <br><br>
+        <br>
+        <br>
         <Badge text="hot">
             <Button type="ghost">Hello</Button>
         </Badge>
-        <br><br>
+        <br>
+        <br>
         <div>
-            <Badge status="success" />
-            <Badge status="error" />
-            <Badge status="default" />
-            <Badge status="processing" />
-            <Badge status="warning" />
-            <br />
-            <Badge status="success" text="Success" />
-            <br />
-            <Badge status="error" text="Error" />
-            <br />
-            <Badge status="default" text="Default" />
-            <br />
-            <Badge status="processing" text="Processing" />
-            <br />
-            <Badge status="warning" text="Warning" />
+            <Badge status="success"/>
+            <Badge status="error"/>
+            <Badge status="default"/>
+            <Badge status="processing"/>
+            <Badge status="warning"/>
+            <br>
+            <Badge status="success" text="Success"/>
+            <br>
+            <Badge status="error" text="Error"/>
+            <br>
+            <Badge status="default" text="Default"/>
+            <br>
+            <Badge status="processing" text="Processing"/>
+            <br>
+            <Badge status="warning" text="Warning"/>
         </div>
         <div style="margin: 50px">
             <Badge dot>
                 <a href="//iviewui.com">我是一个链接</a>
             </Badge>
-            <br><br>
+            <br>
+            <br>
             <Badge :count="10" :offset="[-5, -5]">
                 <a href="//iviewui.com">我是一个链接</a>
             </Badge>
@@ -80,13 +84,13 @@
 <script>
     export default {
         props: {},
-        data () {
+        data() {
             return {
                 count: 5
             };
         },
         methods: {
-            setCount () {
+            setCount() {
                 this.count = 10;
             }
         }
