@@ -16,6 +16,10 @@ import Badge from './components/badge';
 import Card from './components/Card';
 import Switch from './components/switch';
 import InputNumber from './components/input-number';
+import Tabs from './components/tabs';
+import Collapse from './components/collapse';
+import LoadingBar from './components/loading-bar';
+
 import { Select, Option, OptionGroup } from './components/select';
 const components = {
     Affix,
@@ -33,6 +37,7 @@ const components = {
     Submenu: Menu.Sub,
     Option: Option,
     OptionGroup,
+    Panel: Collapse.Panel,
     Select,
     Input,
     Radio,
@@ -42,8 +47,11 @@ const components = {
     CheckboxGroup: Checkbox.Group,
     Cell,
     Card,
+    Collapse,
     InputNumber,
     // Switch,
+    Tabs: Tabs,
+    TabPane: Tabs.Pane,
     CellGroup: Cell.Group
 };
 
@@ -80,7 +88,7 @@ const install = function(Vue, opts = {}) {
         transfer: 'transfer' in opts ? opts.transfer : ''
     };
 
-    // Vue.prototype.$Loading = LoadingBar;
+    Vue.prototype.$Loading = LoadingBar;
     // Vue.prototype.$Message = Message;
     // Vue.prototype.$Modal = Modal;
     // Vue.prototype.$Notice = Notice;

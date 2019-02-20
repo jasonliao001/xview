@@ -60,6 +60,18 @@ const router = new VueRouter({
         {
             path: '/inputNumber',
             component: resolve => require(['./routers/input-number.vue'], resolve)
+        },
+        {
+            path: '/collapse',
+            component: resolve => require(['./routers/collapse.vue'], resolve)
+        },
+        {
+            path: '/tabs',
+            component: resolve => require(['./routers/tabs.vue'], resolve)
+        },
+        {
+            path: '/loading-bar',
+            component: resolve => require(['./routers/loading-bar.vue'], resolve)
         }
     ]
 });

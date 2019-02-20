@@ -62,6 +62,15 @@ nav {
                 <li>
                     <router-link to="/inputNumber">inputNumber</router-link>
                 </li>
+                <li>
+                    <router-link to="/collapse">Collapse</router-link>
+                </li>
+                <li>
+                    <router-link to="/tabs">Tabs</router-link>
+                </li>
+                <li>
+                    <router-link to="/loading-bar">LoadingBar</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>
