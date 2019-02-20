@@ -31,13 +31,15 @@
     </div>
 </template>
 <script>
-    // 主要涉及的知识点还是Number类型的数据转换
-    // https://wangdoc.com/javascript/types/number.html
+    // 这个组价涉及重要是Number数字和浮点数的问题
     import { oneOf, findComponentUpward } from '../../utils/assist';
     import Emitter from '../../mixins/emitter';
+
     const prefixCls = 'ivu-input-number';
     const iconPrefixCls = 'ivu-icon';
+    // 因为0.1+0.2==0.3的问题
 
+    // 浅谈JavaScript浮点数及其运算（https://www.cnblogs.com/ppforever/p/5011660.html）
     function addNum(num1, num2) {
         let sq1, sq2, m;
         try {
@@ -59,6 +61,7 @@
         m = Math.pow(10, Math.max(sq1, sq2));
         return (Math.round(num1 * m) + Math.round(num2 * m)) / m;
     }
+
     export default {
         name: 'InputNumber',
         mixins: [Emitter],
@@ -127,6 +130,14 @@
                 default: ''
             }
         },
+        data() {
+            return {
+                focused: false,
+                upDisabled: false,
+                downDisabled: false,
+                currentValue: this.value
+            };
+        },
         computed: {
             wrapClasses() {
                 return [
@@ -184,14 +195,6 @@
                 }
             }
         },
-        data() {
-            return {
-                focused: false,
-                upDisabled: false,
-                downDisabled: false,
-                currentValue: this.value
-            };
-        },
         methods: {
             preventDefault(e) {
                 e.preventDefault();
@@ -214,19 +217,130 @@
                 if (this.disabled || this.readonly) {
                     return false;
                 }
-                const targetVal = Number(e.target.value);
 
+                const targetVal = Number(e.target.value);
                 let val = Number(this.currentValue);
                 const step = Number(this.step);
                 if (isNaN(val)) {
                     return false;
                 }
+
+                // input a number, and key up or down
                 if (!isNaN(targetVal)) {
                     if (type === 'up') {
-                        if (addNum(targetVal, step) < this.max) {
+                        if (addNum(targetVal, step) <= this.max) {
+                            val = targetVal;
+                        } else {
+                            return false;
+                        }
+                    } else if (type === 'down') {
+                        if (addNum(targetVal, -step) >= this.min) {
+                            val = targetVal;
+                        } else {
+                            return false;
                         }
                     }
                 }
+
+                if (type === 'up') {
+                    val = addNum(val, step);
+                } else if (type === 'down') {
+                    val = addNum(val, -step);
+                }
+                this.setValue(val);
+            },
+            setValue(val) {
+                // 如果 step 是小数，且没有设置 precision，是有问题的
+                if (val && !isNaN(this.precision)) val = Number(Number(val).toFixed(this.precision));
+
+                const { min, max } = this;
+                if (val !== null) {
+                    if (val > max) {
+                        val = max;
+                    } else if (val < min) {
+                        val = min;
+                    }
+                }
+
+                this.$nextTick(() => {
+                    this.currentValue = val;
+                    this.$emit('input', val);
+                    this.$emit('on-change', val);
+                    this.dispatch('FormItem', 'on-form-change', val);
+                });
+            },
+            focus(event) {
+                this.focused = true;
+                this.$emit('on-focus', event);
+            },
+            blur() {
+                this.focused = false;
+                this.$emit('on-blur');
+                if (!findComponentUpward(this, ['DatePicker', 'TimePicker', 'Cascader', 'Search'])) {
+                    this.dispatch('FormItem', 'on-form-blur', this.currentValue);
+                }
+            },
+            keyDown(e) {
+                if (e.keyCode === 38) {
+                    e.preventDefault();
+                    this.up(e);
+                } else if (e.keyCode === 40) {
+                    e.preventDefault();
+                    this.down(e);
+                }
+            },
+            change(event) {
+                if (event.type == 'input' && !this.activeChange) return;
+                let val = event.target.value.trim();
+                if (this.parser) {
+                    val = this.parser(val);
+                }
+                const isEmptyString = val.length === 0;
+                if (isEmptyString) {
+                    this.setValue(null);
+                    return;
+                }
+                if (event.type == 'input' && val.match(/^\-?\.?$|\.$/)) return; // prevent fire early if decimal. If no more input the change event will fire later
+                val = Number(val);
+
+                if (!isNaN(val)) {
+                    this.currentValue = val;
+                    this.setValue(val);
+                } else {
+                    event.target.value = this.currentValue;
+                }
+            },
+            changeVal(val) {
+                val = Number(val);
+                if (!isNaN(val)) {
+                    const step = this.step;
+                    this.upDisabled = val + step > this.max;
+                    this.downDisabled = val - step < this.min;
+                } else {
+                    this.upDisabled = true;
+                    this.downDisabled = true;
+                }
+            }
+        },
+        mounted() {
+            this.changeVal(this.currentValue);
+        },
+        watch: {
+            value(val) {
+                console.log('watch');
+                this.currentValue = val;
+            },
+            currentValue(val) {
+                console.log('watch');
+                this.changeVal(val);
+            },
+            min() {
+                console.log('watch');
+                this.changeVal(this.currentValue);
+            },
+            max() {
+                console.log('watch');
+                this.changeVal(this.currentValue);
             }
         }
     };

@@ -15,6 +15,7 @@ import Cell from './components/cell';
 import Badge from './components/badge';
 import Card from './components/Card';
 import Switch from './components/switch';
+import InputNumber from './components/input-number';
 import { Select, Option, OptionGroup } from './components/select';
 const components = {
     Affix,
@@ -41,6 +42,7 @@ const components = {
     CheckboxGroup: Checkbox.Group,
     Cell,
     Card,
+    InputNumber,
     // Switch,
     CellGroup: Cell.Group
 };

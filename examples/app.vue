@@ -59,6 +59,9 @@ nav {
                 <li>
                     <router-link to="/cell">Cell</router-link>
                 </li>
+                <li>
+                    <router-link to="/inputNumber">inputNumber</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>

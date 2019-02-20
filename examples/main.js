@@ -56,6 +56,10 @@ const router = new VueRouter({
         {
             path: '/cell',
             component: resolve => require(['./routers/cell.vue'], resolve)
+        },
+        {
+            path: '/inputNumber',
+            component: resolve => require(['./routers/input-number.vue'], resolve)
         }
     ]
 });
