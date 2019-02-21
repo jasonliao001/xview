@@ -74,6 +74,15 @@ nav {
                 <li>
                     <router-link to="/modal">Modal</router-link>
                 </li>
+                <li>
+                    <router-link to="/dropdown">Dropdown</router-link>
+                </li>
+                <li>
+                    <router-link to="/tooltip">Tooltip</router-link>
+                </li>
+                <li>
+                    <router-link to="/poptip">Poptip</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>

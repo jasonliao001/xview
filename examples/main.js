@@ -76,6 +76,18 @@ const router = new VueRouter({
         {
             path: '/modal',
             component: resolve => require(['./routers/modal.vue'], resolve)
+        },
+        {
+            path: '/dropdown',
+            component: resolve => require(['./routers/dropdown.vue'], resolve)
+        },
+        {
+            path: '/poptip',
+            component: resolve => require(['./routers/poptip.vue'], resolve)
+        },
+        {
+            path: '/tooltip',
+            component: resolve => require(['./routers/tooltip.vue'], resolve)
         }
     ]
 });

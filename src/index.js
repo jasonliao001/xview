@@ -16,10 +16,13 @@ import Badge from './components/badge';
 import Card from './components/Card';
 import Switch from './components/switch';
 import InputNumber from './components/input-number';
+import Dropdown from './components/dropdown';
 import Tabs from './components/tabs';
 import Collapse from './components/collapse';
 import LoadingBar from './components/loading-bar';
 import Modal from './components/modal';
+import Tooltip from './components/tooltip';
+import Poptip from './components/poptip';
 import { Select, Option, OptionGroup } from './components/select';
 const components = {
     Affix,
@@ -53,7 +56,12 @@ const components = {
     Tabs: Tabs,
     TabPane: Tabs.Pane,
     CellGroup: Cell.Group,
-    Modal
+    Modal,
+    Dropdown,
+    DropdownItem: Dropdown.Item,
+    DropdownMenu: Dropdown.Menu,
+    Poptip,
+    Tooltip
 };
 
 const iview = {
