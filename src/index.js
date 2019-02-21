@@ -24,6 +24,7 @@ import Modal from './components/modal';
 import Tooltip from './components/tooltip';
 import Poptip from './components/poptip';
 import { Select, Option, OptionGroup } from './components/select';
+import Message from './components/message';
 const components = {
     Affix,
     Layout: Layout,
@@ -98,7 +99,7 @@ const install = function(Vue, opts = {}) {
     };
 
     Vue.prototype.$Loading = LoadingBar;
-    // Vue.prototype.$Message = Message;
+    Vue.prototype.$Message = Message;
     Vue.prototype.$Modal = Modal;
     // Vue.prototype.$Notice = Notice;
     // Vue.prototype.$Spin = Spin;

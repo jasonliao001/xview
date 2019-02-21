@@ -83,6 +83,9 @@ nav {
                 <li>
                     <router-link to="/poptip">Poptip</router-link>
                 </li>
+                <li>
+                    <router-link to="/message">Message</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>

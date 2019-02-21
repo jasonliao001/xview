@@ -88,6 +88,10 @@ const router = new VueRouter({
         {
             path: '/tooltip',
             component: resolve => require(['./routers/tooltip.vue'], resolve)
+        },
+        {
+            path: '/message',
+            component: resolve => require(['./routers/message.vue'], resolve)
         }
     ]
 });
