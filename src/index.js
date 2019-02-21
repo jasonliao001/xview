@@ -19,7 +19,7 @@ import InputNumber from './components/input-number';
 import Tabs from './components/tabs';
 import Collapse from './components/collapse';
 import LoadingBar from './components/loading-bar';
-
+import Modal from './components/modal';
 import { Select, Option, OptionGroup } from './components/select';
 const components = {
     Affix,
@@ -52,7 +52,8 @@ const components = {
     // Switch,
     Tabs: Tabs,
     TabPane: Tabs.Pane,
-    CellGroup: Cell.Group
+    CellGroup: Cell.Group,
+    Modal
 };
 
 const iview = {
@@ -90,7 +91,7 @@ const install = function(Vue, opts = {}) {
 
     Vue.prototype.$Loading = LoadingBar;
     // Vue.prototype.$Message = Message;
-    // Vue.prototype.$Modal = Modal;
+    Vue.prototype.$Modal = Modal;
     // Vue.prototype.$Notice = Notice;
     // Vue.prototype.$Spin = Spin;
 };

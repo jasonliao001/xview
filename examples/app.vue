@@ -71,6 +71,9 @@ nav {
                 <li>
                     <router-link to="/loading-bar">LoadingBar</router-link>
                 </li>
+                <li>
+                    <router-link to="/modal">Modal</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>

@@ -72,6 +72,10 @@ const router = new VueRouter({
         {
             path: '/loading-bar',
             component: resolve => require(['./routers/loading-bar.vue'], resolve)
+        },
+        {
+            path: '/modal',
+            component: resolve => require(['./routers/modal.vue'], resolve)
         }
     ]
 });
