@@ -5,7 +5,7 @@
 </template>
 <script>
     export default {
-        data () {
+        data() {
             return {
                 cityList: [
                     {
@@ -34,7 +34,7 @@
                     }
                 ],
                 model1: 'Sydney'
-            }
+            };
         }
-    }
+    };
 </script>
