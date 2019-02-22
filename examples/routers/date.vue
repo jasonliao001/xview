@@ -256,7 +256,8 @@
         <DatePicker type="month" show-week-numbers placeholder="Select date" style="width: 200px"></DatePicker>
         <DatePicker type="year" show-week-numbers placeholder="Select date" style="width: 200px"></DatePicker>
 
-        <DatePicker type="date" transfer show-week-numbers placeholder="Select date" style="width: 400px"></DatePicker>
+        <DatePicker type="date" transfer show-week-numbers multiple placeholder="Select date" style="width: 400px"></DatePicker>
+
         <DatePicker type="datetime" show-week-numbers confirm placeholder="Select date" style="width: 400px"></DatePicker>
 
         <DatePicker type="daterange" transfer show-week-numbers placeholder="Select date" style="width: 400px"></DatePicker>

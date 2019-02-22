@@ -125,32 +125,13 @@ const HIDDEN_TEXTAREA_STYLE = `
   right:0 !important
 `;
 
-const SIZING_STYLE = [
-    'letter-spacing',
-    'line-height',
-    'padding-top',
-    'padding-bottom',
-    'font-family',
-    'font-weight',
-    'font-size',
-    'text-rendering',
-    'text-transform',
-    'width',
-    'text-indent',
-    'padding-left',
-    'padding-right',
-    'border-width',
-    'box-sizing',
-];
+const SIZING_STYLE = ['letter-spacing', 'line-height', 'padding-top', 'padding-bottom', 'font-family', 'font-weight', 'font-size', 'text-rendering', 'text-transform', 'width', 'text-indent', 'padding-left', 'padding-right', 'border-width', 'box-sizing'];
 
 let computedStyleCache = {};
 let hiddenTextarea;
 
 function calculateNodeStyling(node, useCache = false) {
-    const nodeRef = (
-            node.getAttribute('id') ||
-            node.getAttribute('data-reactid') ||
-            node.getAttribute('name'));
+    const nodeRef = node.getAttribute('id') || node.getAttribute('data-reactid') || node.getAttribute('name');
 
     if (useCache && computedStyleCache[nodeRef]) {
         return computedStyleCache[nodeRef];
@@ -158,31 +139,19 @@ function calculateNodeStyling(node, useCache = false) {
 
     const style = window.getComputedStyle(node);
 
-    const boxSizing = (
-        style.getPropertyValue('box-sizing') ||
-        style.getPropertyValue('-moz-box-sizing') ||
-        style.getPropertyValue('-webkit-box-sizing')
-    );
+    const boxSizing = style.getPropertyValue('box-sizing') || style.getPropertyValue('-moz-box-sizing') || style.getPropertyValue('-webkit-box-sizing');
 
-    const paddingSize = (
-        parseFloat(style.getPropertyValue('padding-bottom')) +
-        parseFloat(style.getPropertyValue('padding-top'))
-    );
+    const paddingSize = parseFloat(style.getPropertyValue('padding-bottom')) + parseFloat(style.getPropertyValue('padding-top'));
 
-    const borderSize = (
-        parseFloat(style.getPropertyValue('border-bottom-width')) +
-        parseFloat(style.getPropertyValue('border-top-width'))
-    );
+    const borderSize = parseFloat(style.getPropertyValue('border-bottom-width')) + parseFloat(style.getPropertyValue('border-top-width'));
 
-    const sizingStyle = SIZING_STYLE
-        .map(name => `${name}:${style.getPropertyValue(name)}`)
-        .join(';');
+    const sizingStyle = SIZING_STYLE.map(name => `${name}:${style.getPropertyValue(name)}`).join(';');
 
     const nodeInfo = {
         sizingStyle,
         paddingSize,
         borderSize,
-        boxSizing,
+        boxSizing
     };
 
     if (useCache && nodeRef) {
@@ -208,10 +177,7 @@ export default function calcTextareaHeight(uiTextNode, minRows = null, maxRows =
 
     // Copy all CSS properties that have an impact on the height of the content in
     // the textbox
-    let {
-        paddingSize, borderSize,
-        boxSizing, sizingStyle,
-    } = calculateNodeStyling(uiTextNode, useCache);
+    let { paddingSize, borderSize, boxSizing, sizingStyle } = calculateNodeStyling(uiTextNode, useCache);
 
     // Need to have the overflow attribute to hide the scrollbar otherwise
     // text-lines will not calculated properly as the shadow will technically be

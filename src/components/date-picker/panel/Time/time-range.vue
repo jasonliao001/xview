@@ -18,7 +18,8 @@
                     :disabled-seconds="disabledSeconds"
                     :hide-disabled-options="hideDisabledOptions"
                     @on-change="handleStartChange"
-                    @on-pick-click="handlePickClick"></time-spinner>
+                    @on-pick-click="handlePickClick"
+                ></time-spinner>
             </div>
             <div :class="[prefixCls + '-content', prefixCls + '-content-right']">
                 <div :class="[timePrefixCls + '-header']">
@@ -37,12 +38,10 @@
                     :disabled-seconds="disabledSeconds"
                     :hide-disabled-options="hideDisabledOptions"
                     @on-change="handleEndChange"
-                    @on-pick-click="handlePickClick"></time-spinner>
+                    @on-pick-click="handlePickClick"
+                ></time-spinner>
             </div>
-            <Confirm
-                v-if="confirm"
-                @on-pick-clear="handlePickClear"
-                @on-pick-success="handlePickSuccess"></Confirm>
+            <Confirm v-if="confirm" @on-pick-clear="handlePickClear" @on-pick-success="handlePickSuccess"></Confirm>
         </div>
     </div>
 </template>
@@ -50,7 +49,6 @@
     import TimeSpinner from '../../base/time-spinner.vue';
     import Confirm from '../../base/confirm.vue';
     import Options from '../../time-mixins';
-
 
     import Mixin from '../panel-mixin';
     import Locale from '../../../../mixins/locale';
@@ -60,11 +58,11 @@
     const prefixCls = 'ivu-picker-panel';
     const timePrefixCls = 'ivu-time-picker';
 
-    const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
+    const capitalize = str => str[0].toUpperCase() + str.slice(1);
 
     export default {
         name: 'RangeTimePickerPanel',
-        mixins: [ Mixin, Locale, Options ],
+        mixins: [Mixin, Locale, Options],
         components: { TimeSpinner, Confirm },
         props: {
             steps: {
@@ -78,9 +76,9 @@
             value: {
                 type: Array,
                 required: true
-            },
+            }
         },
-        data () {
+        data() {
             const [dateStart, dateEnd] = this.value.slice();
             return {
                 prefixCls: prefixCls,
@@ -91,7 +89,7 @@
             };
         },
         computed: {
-            classes () {
+            classes() {
                 return [
                     `${prefixCls}-body-wrapper`,
                     `${timePrefixCls}-with-range`,
@@ -100,32 +98,31 @@
                     }
                 ];
             },
-            showSeconds () {
+            showSeconds() {
                 return !(this.format || '').match(/mm$/);
             },
-            leftDatePanelLabel () {
+            leftDatePanelLabel() {
                 return this.panelLabelConfig(this.date);
             },
-            rightDatePanelLabel () {
+            rightDatePanelLabel() {
                 return this.panelLabelConfig(this.dateEnd);
             }
         },
         watch: {
-            value (dates) {
+            value(dates) {
                 const [dateStart, dateEnd] = dates.slice();
                 this.dateStart = dateStart || initTimeDate();
                 this.dateEnd = dateEnd || initTimeDate();
             }
         },
         methods: {
-            panelLabelConfig (date) {
+            panelLabelConfig(date) {
                 const locale = this.t('i.locale');
                 const datePanelLabel = this.t('i.datepicker.datePanelLabel');
                 const { labels, separator } = formatDateLabels(locale, datePanelLabel, date || initTimeDate());
                 return [labels[0].label, separator, labels[1].label].join('');
             },
-            handleChange (start, end, emit = true) {
-
+            handleChange(start, end, emit = true) {
                 const dateStart = new Date(this.dateStart);
                 let dateEnd = new Date(this.dateEnd);
 
@@ -144,18 +141,18 @@
 
                 if (emit) this.$emit('on-pick', [dateStart, dateEnd], 'time');
             },
-            handleStartChange (date) {
+            handleStartChange(date) {
                 this.handleChange(date, {});
             },
-            handleEndChange (date) {
+            handleEndChange(date) {
                 this.handleChange({}, date);
             },
-            updateScroll () {
+            updateScroll() {
                 this.$refs.timeSpinner.updateScroll();
                 this.$refs.timeSpinnerEnd.updateScroll();
             }
         },
-        mounted () {
+        mounted() {
             if (this.$parent && this.$parent.$options.name === 'DatePicker') this.showDate = true;
         }
     };

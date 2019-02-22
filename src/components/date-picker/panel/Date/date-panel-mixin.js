@@ -1,7 +1,5 @@
-
 import { oneOf } from '../../../../utils/assist';
-import {initTimeDate } from '../../util';
-
+import { initTimeDate } from '../../util';
 
 export default {
     props: {
@@ -15,7 +13,7 @@ export default {
         },
         selectionMode: {
             type: String,
-            validator (value) {
+            validator(value) {
                 return oneOf(value, ['year', 'month', 'date', 'time']);
             },
             default: 'date'
@@ -34,7 +32,7 @@ export default {
         },
         timePickerOptions: {
             default: () => ({}),
-            type: Object,
+            type: Object
         },
         showWeekNumbers: {
             type: Boolean,
@@ -49,17 +47,17 @@ export default {
         },
         focusedDate: {
             type: Date,
-            required: true,
+            required: true
         }
     },
     computed: {
-        isTime(){
+        isTime() {
             return this.currentView === 'time';
         }
     },
     methods: {
-        handleToggleTime(){
+        handleToggleTime() {
             this.currentView = this.currentView === 'time' ? 'date' : 'time';
-        },
+        }
     }
 };

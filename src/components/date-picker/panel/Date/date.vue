@@ -1,33 +1,37 @@
 <template>
     <div :class="classes" @mousedown.prevent>
         <div :class="[prefixCls + '-sidebar']" v-if="shortcuts.length">
-            <div
-                :class="[prefixCls + '-shortcut']"
-                v-for="shortcut in shortcuts"
-                @click="handleShortcutClick(shortcut)">{{ shortcut.text }}</div>
+            <div :class="[prefixCls + '-shortcut']" v-for="shortcut in shortcuts" @click="handleShortcutClick(shortcut)">{{ shortcut.text }}</div>
         </div>
         <div :class="[prefixCls + '-body']">
             <div :class="[datePrefixCls + '-header']" v-show="currentView !== 'time'">
-                <span
-                    :class="iconBtnCls('prev', '-double')"
-                    @click="changeYear(-1)"><Icon type="ios-arrow-back"></Icon></span>
+                <span :class="iconBtnCls('prev', '-double')" @click="changeYear(-1)">
+                    <Icon type="ios-arrow-back"></Icon>
+                </span>
                 <span
                     v-if="pickerTable === 'date-table'"
                     :class="iconBtnCls('prev')"
                     @click="changeMonth(-1)"
-                    v-show="currentView === 'date'"><Icon type="ios-arrow-back"></Icon></span>
+                    v-show="currentView === 'date'"
+                >
+                    <Icon type="ios-arrow-back"></Icon>
+                </span>
                 <date-panel-label
                     :date-panel-label="datePanelLabel"
                     :current-view="pickerTable.split('-').shift()"
-                    :date-prefix-cls="datePrefixCls"></date-panel-label>
-                <span
-                    :class="iconBtnCls('next', '-double')"
-                    @click="changeYear(+1)"><Icon type="ios-arrow-forward"></Icon></span>
+                    :date-prefix-cls="datePrefixCls"
+                ></date-panel-label>
+                <span :class="iconBtnCls('next', '-double')" @click="changeYear(+1)">
+                    <Icon type="ios-arrow-forward"></Icon>
+                </span>
                 <span
                     v-if="pickerTable === 'date-table'"
                     :class="iconBtnCls('next')"
                     @click="changeMonth(+1)"
-                    v-show="currentView === 'date'"><Icon type="ios-arrow-forward"></Icon></span>
+                    v-show="currentView === 'date'"
+                >
+                    <Icon type="ios-arrow-forward"></Icon>
+                </span>
             </div>
             <div :class="[prefixCls + '-content']">
                 <component
@@ -40,7 +44,6 @@
                     :selection-mode="selectionMode"
                     :disabled-date="disabledDate"
                     :focused-date="focusedDate"
-
                     @on-pick="panelPickerHandlers"
                     @on-pick-click="handlePickClick"
                 ></component>
@@ -54,7 +57,6 @@
                     :time-disabled="timeDisabled"
                     :disabled-date="disabledDate"
                     :focused-date="focusedDate"
-
                     v-bind="timePickerOptions"
                     @on-pick="handlePick"
                     @on-pick-click="handlePickClick"
@@ -94,7 +96,7 @@
 
     export default {
         name: 'DatePickerPanel',
-        mixins: [ Mixin, Locale, DateMixin ],
+        mixins: [Mixin, Locale, DateMixin],
         components: { Icon, DateTable, YearTable, MonthTable, TimePicker, Confirm, datePanelLabel },
         props: {
             // more props in the mixin
@@ -103,8 +105,8 @@
                 default: false
             }
         },
-        data () {
-            const {selectionMode, value} = this;
+        data() {
+            const { selectionMode, value } = this;
 
             const dates = value.slice().sort();
             return {
@@ -117,7 +119,7 @@
             };
         },
         computed: {
-            classes () {
+            classes() {
                 return [
                     `${prefixCls}-body-wrapper`,
                     {
@@ -125,17 +127,17 @@
                     }
                 ];
             },
-            panelPickerHandlers(){
+            panelPickerHandlers() {
                 return this.pickerTable === `${this.currentView}-table` ? this.handlePick : this.handlePreSelection;
             },
-            datePanelLabel () {
+            datePanelLabel() {
                 const locale = this.t('i.locale');
                 const datePanelLabel = this.t('i.datepicker.datePanelLabel');
                 const date = this.panelDate;
                 const { labels, separator } = formatDateLabels(locale, datePanelLabel, date);
 
                 const handler = type => {
-                    return () => this.pickerTable = this.getTableType(type);
+                    return () => (this.pickerTable = this.getTableType(type));
                 };
 
                 return {
@@ -143,17 +145,17 @@
                     labels: labels.map(obj => ((obj.handler = handler(obj.type)), obj))
                 };
             },
-            timeDisabled(){
+            timeDisabled() {
                 return !this.dates[0];
             }
         },
         watch: {
-            value (newVal) {
+            value(newVal) {
                 this.dates = newVal;
-                const panelDate = this.multiple ? this.dates[this.dates.length - 1] : (this.startDate || this.dates[0]);
+                const panelDate = this.multiple ? this.dates[this.dates.length - 1] : this.startDate || this.dates[0];
                 this.panelDate = panelDate || new Date();
             },
-            currentView (currentView) {
+            currentView(currentView) {
                 this.$emit('on-selection-mode-change', currentView);
 
                 if (this.currentView === 'time') {
@@ -163,51 +165,50 @@
                     });
                 }
             },
-            selectionMode(type){
+            selectionMode(type) {
                 this.currentView = type;
                 this.pickerTable = this.getTableType(type);
             },
-            focusedDate(date){
+            focusedDate(date) {
                 const isDifferentYear = date.getFullYear() !== this.panelDate.getFullYear();
                 const isDifferentMonth = isDifferentYear || date.getMonth() !== this.panelDate.getMonth();
-                if (isDifferentYear || isDifferentMonth){
+                if (isDifferentYear || isDifferentMonth) {
                     if (!this.multiple) this.panelDate = date;
                 }
             }
         },
         methods: {
-            reset(){
+            reset() {
                 this.currentView = this.selectionMode;
                 this.pickerTable = this.getTableType(this.currentView);
             },
-            changeYear(dir){
-                if (this.selectionMode === 'year' || this.pickerTable === 'year-table'){
+            changeYear(dir) {
+                if (this.selectionMode === 'year' || this.pickerTable === 'year-table') {
                     this.panelDate = new Date(this.panelDate.getFullYear() + dir * 10, 0, 1);
                 } else {
                     this.panelDate = siblingMonth(this.panelDate, dir * 12);
                 }
             },
-            getTableType(currentView){
+            getTableType(currentView) {
                 return currentView.match(/^time/) ? 'time-picker' : `${currentView}-table`;
             },
-            changeMonth(dir){
+            changeMonth(dir) {
                 this.panelDate = siblingMonth(this.panelDate, dir);
             },
-            handlePreSelection(value){
+            handlePreSelection(value) {
                 this.panelDate = value;
                 if (this.pickerTable === 'year-table') this.pickerTable = 'month-table';
                 else this.pickerTable = this.getTableType(this.currentView);
-
             },
-            handlePick (value, type) {
-                const {selectionMode, panelDate} = this;
+            handlePick(value, type) {
+                const { selectionMode, panelDate } = this;
                 if (selectionMode === 'year') value = new Date(value.getFullYear(), 0, 1);
                 else if (selectionMode === 'month') value = new Date(panelDate.getFullYear(), value.getMonth(), 1);
                 else value = new Date(value);
 
                 this.dates = [value];
                 this.$emit('on-pick', value, false, type || selectionMode);
-            },
-        },
+            }
+        }
     };
 </script>

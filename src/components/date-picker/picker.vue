@@ -1,9 +1,5 @@
 <template>
-    <div
-        :class="wrapperClasses"
-        v-click-outside:mousedown.capture="handleClose"
-        v-click-outside.capture="handleClose"
-    >
+    <div :class="wrapperClasses" v-click-outside:mousedown.capture="handleClose" v-click-outside.capture="handleClose">
         <div ref="reference" :class="[prefixCls + '-rel']">
             <slot>
                 <i-input
@@ -17,7 +13,6 @@
                     :value="visualValue"
                     :name="name"
                     ref="input"
-
                     @on-input-change="handleInputChange"
                     @on-focus="handleFocus"
                     @on-blur="handleBlur"
@@ -26,7 +21,6 @@
                     @keydown.native="handleKeydown"
                     @mouseenter.native="handleInputMouseenter"
                     @mouseleave.native="handleInputMouseleave"
-
                     :icon="iconType"
                 ></i-input>
             </slot>
@@ -40,7 +34,8 @@
                 ref="drop"
                 :data-transfer="transfer"
                 :transfer="transfer"
-                v-transfer-dom>
+                v-transfer-dom
+            >
                 <div>
                     <component
                         :is="panel"
@@ -58,11 +53,8 @@
                         :picker-type="type"
                         :multiple="multiple"
                         :focused-date="focusedDate"
-
                         :time-picker-options="timePickerOptions"
-
                         v-bind="ownPickerProps"
-
                         @on-pick="onPick"
                         @on-pick-clear="handleClear"
                         @on-pick-success="onPickSuccess"
@@ -75,26 +67,24 @@
     </div>
 </template>
 <script>
-
-
     import iInput from '../../components/input/input.vue';
     import Drop from '../../components/select/dropdown.vue';
-    import {directive as clickOutside} from 'v-click-outside-x';
+    import { directive as clickOutside } from 'v-click-outside-x';
     import TransferDom from '../../directives/transfer-dom';
     import { oneOf } from '../../utils/assist';
     import { DEFAULT_FORMATS, RANGE_SEPARATOR, TYPE_VALUE_RESOLVER_MAP, getDayCountOfMonth } from './util';
-    import {findComponentsDownward} from '../../utils/assist';
+    import { findComponentsDownward } from '../../utils/assist';
     import Emitter from '../../mixins/emitter';
 
     const prefixCls = 'ivu-date-picker';
     const pickerPrefixCls = 'ivu-picker';
 
-    const isEmptyArray = val => val.reduce((isEmpty, str) => isEmpty && !str || (typeof str === 'string' && str.trim() === ''), true);
+    const isEmptyArray = val => val.reduce((isEmpty, str) => (isEmpty && !str) || (typeof str === 'string' && str.trim() === ''), true);
     const keyValueMapper = {
         40: 'up',
         39: 'right',
         38: 'down',
-        37: 'left',
+        37: 'left'
     };
 
     const mapPossibleValues = (key, horizontal, vertical) => {
@@ -104,7 +94,7 @@
         if (key === 'down') return vertical * -1;
     };
 
-    const pulseElement = (el) => {
+    const pulseElement = el => {
         const pulseClass = 'ivu-date-picker-btn-pulse';
         el.classList.add(pulseClass);
         setTimeout(() => el.classList.remove(pulseClass), 200);
@@ -112,14 +102,11 @@
 
     const extractTime = date => {
         if (!date) return [0, 0, 0];
-        return [
-            date.getHours(), date.getMinutes(), date.getSeconds()
-        ];
+        return [date.getHours(), date.getMinutes(), date.getSeconds()];
     };
 
-
     export default {
-        mixins: [ Emitter ],
+        mixins: [Emitter],
         components: { iInput, Drop },
         directives: { clickOutside, TransferDom },
         props: {
@@ -156,7 +143,7 @@
             },
             timePickerOptions: {
                 default: () => ({}),
-                type: Object,
+                type: Object
             },
             splitPanels: {
                 type: Boolean,
@@ -170,10 +157,10 @@
                 type: Date
             },
             size: {
-                validator (value) {
+                validator(value) {
                     return oneOf(value, ['small', 'large', 'default']);
                 },
-                default () {
+                default() {
                     return !this.$IVIEW || this.$IVIEW.size === '' ? 'default' : this.$IVIEW.size;
                 }
             },
@@ -182,14 +169,14 @@
                 default: ''
             },
             placement: {
-                validator (value) {
+                validator(value) {
                     return oneOf(value, ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end']);
                 },
                 default: 'bottom-start'
             },
             transfer: {
                 type: Boolean,
-                default () {
+                default() {
                     return !this.$IVIEW || this.$IVIEW.transfer === '' ? false : this.$IVIEW.transfer;
                 }
             },
@@ -211,7 +198,7 @@
                 default: () => ({})
             }
         },
-        data(){
+        data() {
             const isRange = this.type.includes('range');
             const emptyArray = isRange ? [null, null] : [null];
             const initialValue = isEmptyArray((isRange ? this.value : [this.value]) || []) ? emptyArray : this.parseDate(this.value);
@@ -222,8 +209,8 @@
                 showClose: false,
                 visible: false,
                 internalValue: initialValue,
-                disableClickOutSide: false,    // fixed when click a date,trigger clickoutside to close picker
-                disableCloseUnderTransfer: false,  // transfer 模式下，点击Drop也会触发关闭,
+                disableClickOutSide: false, // fixed when click a date,trigger clickoutside to close picker
+                disableCloseUnderTransfer: false, // transfer 模式下，点击Drop也会触发关闭,
                 selectionMode: this.onSelectionModeChange(this.type),
                 forceInputRerender: 1,
                 isFocused: false,
@@ -234,63 +221,66 @@
                     time: focusedTime, // the values array into [hh, mm, ss],
                     active: false
                 },
-                internalFocus: false,
+                internalFocus: false
             };
         },
         computed: {
-            wrapperClasses(){
-                return [prefixCls, {
-                    [prefixCls + '-focused']: this.isFocused
-                }];
+            wrapperClasses() {
+                return [
+                    prefixCls,
+                    {
+                        [prefixCls + '-focused']: this.isFocused
+                    }
+                ];
             },
-            publicVModelValue(){
-                if (this.multiple){
+            publicVModelValue() {
+                if (this.multiple) {
                     return this.internalValue.slice();
                 } else {
                     const isRange = this.type.includes('range');
-                    let val = this.internalValue.map(date => date instanceof Date ? new Date(date) : (date || ''));
+                    let val = this.internalValue.map(date => (date instanceof Date ? new Date(date) : date || ''));
 
                     if (this.type.match(/^time/)) val = val.map(this.formatDate);
-                    return (isRange || this.multiple) ? val : val[0];
+                    return isRange || this.multiple ? val : val[0];
                 }
             },
-            publicStringValue(){
-                const {formatDate, publicVModelValue, type} = this;
+            publicStringValue() {
+                const { formatDate, publicVModelValue, type } = this;
                 if (type.match(/^time/)) return publicVModelValue;
                 if (this.multiple) return formatDate(publicVModelValue);
                 return Array.isArray(publicVModelValue) ? publicVModelValue.map(formatDate) : formatDate(publicVModelValue);
             },
-            opened () {
+            opened() {
                 return this.open === null ? this.visible : this.open;
             },
-            iconType () {
+            iconType() {
                 let icon = 'ios-calendar-outline';
                 if (this.type === 'time' || this.type === 'timerange') icon = 'ios-time-outline';
                 if (this.showClose) icon = 'ios-close-circle';
                 return icon;
             },
-            transition () {
+            transition() {
                 const bottomPlaced = this.placement.match(/^bottom/);
                 return bottomPlaced ? 'slide-up' : 'slide-down';
             },
             visualValue() {
                 return this.formatDate(this.internalValue);
             },
-            isConfirm(){
+            isConfirm() {
                 return this.confirm || this.type === 'datetime' || this.type === 'datetimerange' || this.multiple;
             }
         },
         methods: {
-            onSelectionModeChange(type){
+            onSelectionModeChange(type) {
                 if (type.match(/^date/)) type = 'date';
                 this.selectionMode = oneOf(type, ['year', 'month', 'date', 'time']) && type;
                 return this.selectionMode;
             },
             // 开启 transfer 时，点击 Drop 即会关闭，这里不让其关闭
-            handleTransferClick () {
+            handleTransferClick() {
                 if (this.transfer) this.disableCloseUnderTransfer = true;
             },
-            handleClose (e) {
+            handleClose(e) {
                 if (this.disableCloseUnderTransfer) {
                     this.disableCloseUnderTransfer = false;
                     return false;
@@ -315,16 +305,16 @@
                 this.isFocused = false;
                 this.disableClickOutSide = false;
             },
-            handleFocus (e) {
+            handleFocus(e) {
                 if (this.readonly) return;
                 this.isFocused = true;
                 if (e && e.type === 'focus') return; // just focus, don't open yet
-                if(!this.disabled){
+                if (!this.disabled) {
                     this.visible = true;
                 }
             },
-            handleBlur (e) {
-                if (this.internalFocus){
+            handleBlur(e) {
+                if (this.internalFocus) {
                     this.internalFocus = false;
                     return;
                 }
@@ -338,18 +328,17 @@
                 this.internalValue = this.internalValue.slice(); // trigger panel watchers to reset views
                 this.reset();
                 this.$refs.pickerPanel.onToggleVisibility(false);
-
             },
-            handleKeydown(e){
+            handleKeydown(e) {
                 const keyCode = e.keyCode;
 
                 // handle "tab" key
-                if (keyCode === 9){
-                    if (this.visible){
+                if (keyCode === 9) {
+                    if (this.visible) {
                         e.stopPropagation();
                         e.preventDefault();
 
-                        if (this.isConfirm){
+                        if (this.isConfirm) {
                             const selector = `.${pickerPrefixCls}-confirm > *`;
                             const tabbable = this.$refs.drop.$el.querySelectorAll(selector);
                             this.internalFocus = true;
@@ -365,13 +354,13 @@
 
                 // open the panel
                 const arrows = [37, 38, 39, 40];
-                if (!this.visible && arrows.includes(keyCode)){
+                if (!this.visible && arrows.includes(keyCode)) {
                     this.visible = true;
                     return;
                 }
 
                 // close on "esc" key
-                if (keyCode === 27){
+                if (keyCode === 27) {
                     if (this.visible) {
                         e.stopPropagation();
                         this.handleClose();
@@ -379,9 +368,9 @@
                 }
 
                 // select date, "Enter" key
-                if (keyCode === 13){
+                if (keyCode === 13) {
                     const timePickers = findComponentsDownward(this, 'TimeSpinner');
-                    if (timePickers.length > 0){
+                    if (timePickers.length > 0) {
                         const columnsPerPicker = timePickers[0].showSeconds ? 3 : 2;
                         const pickerIndex = Math.floor(this.focusedTime.column / columnsPerPicker);
                         const value = this.focusedTime.time[pickerIndex];
@@ -390,16 +379,16 @@
                         return;
                     }
 
-                    if (this.type.match(/range/)){
+                    if (this.type.match(/range/)) {
                         this.$refs.pickerPanel.handleRangePick(this.focusedDate, 'date');
                     } else {
                         const panels = findComponentsDownward(this, 'PanelTable');
-                        const compareDate = (d) => {
-                            const sliceIndex = ['year', 'month', 'date'].indexOf((this.type)) + 1;
+                        const compareDate = d => {
+                            const sliceIndex = ['year', 'month', 'date'].indexOf(this.type) + 1;
                             return [d.getFullYear(), d.getMonth(), d.getDate()].slice(0, sliceIndex).join('-');
                         };
-                        const dateIsValid = panels.find(({cells}) => {
-                            return cells.find(({date, disabled}) => compareDate(date) === compareDate(this.focusedDate) && !disabled);
+                        const dateIsValid = panels.find(({ cells }) => {
+                            return cells.find(({ date, disabled }) => compareDate(date) === compareDate(this.focusedDate) && !disabled);
                         });
                         if (dateIsValid) this.onPick(this.focusedDate, false, 'date');
                     }
@@ -411,11 +400,10 @@
                 if (this.focusedTime.active) e.preventDefault(); // to prevent cursor from moving
                 this.navigateDatePanel(keyValueMapper[keyCode], e.shiftKey);
             },
-            reset(){
+            reset() {
                 this.$refs.pickerPanel.reset && this.$refs.pickerPanel.reset();
             },
-            navigateTimePanel(direction){
-
+            navigateTimePanel(direction) {
                 this.focusedTime.active = true;
                 const horizontal = direction.match(/left|right/);
                 const vertical = direction.match(/up|down/);
@@ -431,8 +419,7 @@
                 const pickerIndex = Math.floor(column / columnsPerPicker);
                 const col = column % columnsPerPicker;
 
-
-                if (horizontal){
+                if (horizontal) {
                     const time = this.internalValue.map(extractTime);
 
                     this.focusedTime = {
@@ -446,13 +433,12 @@
                     });
                 }
 
-                if (vertical){
+                if (vertical) {
                     const increment = direction === 'up' ? 1 : -1;
                     const timeParts = ['hours', 'minutes', 'seconds'];
 
-
                     const pickerPossibleValues = timePickers[pickerIndex][`${timeParts[col]}List`];
-                    const nextIndex = pickerPossibleValues.findIndex(({text}) => this.focusedTime.time[pickerIndex][col] === text) + increment;
+                    const nextIndex = pickerPossibleValues.findIndex(({ text }) => this.focusedTime.time[pickerIndex][col] === text) + increment;
                     const nextValue = pickerPossibleValues[nextIndex % pickerPossibleValues.length].text;
                     const times = this.focusedTime.time.map((time, i) => {
                         if (i !== pickerIndex) return time;
@@ -470,8 +456,7 @@
                     });
                 }
             },
-            navigateDatePanel(direction, shift){
-
+            navigateDatePanel(direction, shift) {
                 const timePickers = findComponentsDownward(this, 'TimeSpinner');
                 if (timePickers.length > 0) {
                     // we are in TimePicker mode
@@ -479,19 +464,11 @@
                     return;
                 }
 
-                if (shift){
-                    if (this.type === 'year'){
-                        this.focusedDate = new Date(
-                            this.focusedDate.getFullYear() + mapPossibleValues(direction, 0, 10),
-                            this.focusedDate.getMonth(),
-                            this.focusedDate.getDate()
-                        );
+                if (shift) {
+                    if (this.type === 'year') {
+                        this.focusedDate = new Date(this.focusedDate.getFullYear() + mapPossibleValues(direction, 0, 10), this.focusedDate.getMonth(), this.focusedDate.getDate());
                     } else {
-                        this.focusedDate = new Date(
-                            this.focusedDate.getFullYear() + mapPossibleValues(direction, 0, 1),
-                            this.focusedDate.getMonth() + mapPossibleValues(direction, 1, 0),
-                            this.focusedDate.getDate()
-                        );
+                        this.focusedDate = new Date(this.focusedDate.getFullYear() + mapPossibleValues(direction, 0, 1), this.focusedDate.getMonth() + mapPossibleValues(direction, 1, 0), this.focusedDate.getDate());
                     }
 
                     const position = direction.match(/left|down/) ? 'prev' : 'next';
@@ -506,10 +483,10 @@
                 const initialDate = this.focusedDate || (this.internalValue && this.internalValue[0]) || new Date();
                 const focusedDate = new Date(initialDate);
 
-                if (this.type.match(/^date/)){
+                if (this.type.match(/^date/)) {
                     const lastOfMonth = getDayCountOfMonth(initialDate.getFullYear(), initialDate.getMonth());
                     const startDay = initialDate.getDate();
-                    const nextDay = focusedDate.getDate() +  mapPossibleValues(direction, 1, 7);
+                    const nextDay = focusedDate.getDate() + mapPossibleValues(direction, 1, 7);
 
                     if (nextDay < 1) {
                         if (direction.match(/left|right/)) {
@@ -518,7 +495,7 @@
                         } else {
                             focusedDate.setDate(startDay + Math.floor((lastOfMonth - startDay) / 7) * 7);
                         }
-                    } else if (nextDay > lastOfMonth){
+                    } else if (nextDay > lastOfMonth) {
                         if (direction.match(/left|right/)) {
                             focusedDate.setMonth(focusedDate.getMonth() - 1);
                             focusedDate.setDate(nextDay);
@@ -540,15 +517,12 @@
 
                 this.focusedDate = focusedDate;
             },
-            handleInputChange (event) {
+            handleInputChange(event) {
                 const isArrayValue = this.type.includes('range') || this.multiple;
                 const oldValue = this.visualValue;
                 const newValue = event.target.value;
                 const newDate = this.parseDate(newValue);
-                const disabledDateFn =
-                    this.options &&
-                    typeof this.options.disabledDate === 'function' &&
-                    this.options.disabledDate;
+                const disabledDateFn = this.options && typeof this.options.disabledDate === 'function' && this.options.disabledDate;
                 const valueToTest = isArrayValue ? newDate : newDate[0];
                 const isDisabled = disabledDateFn && disabledDateFn(valueToTest);
                 const isValidDate = newDate.reduce((valid, date) => valid && date instanceof Date, true);
@@ -560,16 +534,16 @@
                     this.forceInputRerender++;
                 }
             },
-            handleInputMouseenter () {
+            handleInputMouseenter() {
                 if (this.readonly || this.disabled) return;
                 if (this.visualValue && this.clearable) {
                     this.showClose = true;
                 }
             },
-            handleInputMouseleave () {
+            handleInputMouseleave() {
                 this.showClose = false;
             },
-            handleIconClick (e) {
+            handleIconClick(e) {
                 if (this.showClose) {
                     if (e) e.stopPropagation();
                     this.handleClear();
@@ -577,7 +551,7 @@
                     this.handleFocus();
                 }
             },
-            handleClear () {
+            handleClear() {
                 this.visible = false;
                 this.internalValue = this.internalValue.map(() => null);
                 this.$emit('on-clear');
@@ -590,7 +564,7 @@
                     500 // delay to improve dropdown close visual effect
                 );
             },
-            emitChange (type) {
+            emitChange(type) {
                 this.$nextTick(() => {
                     this.$emit('on-change', this.publicStringValue, type);
                     this.dispatch('FormItem', 'on-form-change', this.publicStringValue);
@@ -599,10 +573,7 @@
             parseDate(val) {
                 const isRange = this.type.includes('range');
                 const type = this.type;
-                const parser = (
-                    TYPE_VALUE_RESOLVER_MAP[type] ||
-                    TYPE_VALUE_RESOLVER_MAP['default']
-                ).parser;
+                const parser = (TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP['default']).parser;
                 const format = this.format || DEFAULT_FORMATS[type];
                 const multipleParser = TYPE_VALUE_RESOLVER_MAP['multiple'].parser;
 
@@ -611,7 +582,7 @@
                 } else if (this.multiple && val) {
                     val = multipleParser(val, format);
                 } else if (isRange) {
-                    if (!val){
+                    if (!val) {
                         val = [null, null];
                     } else {
                         if (typeof val === 'string') {
@@ -620,37 +591,34 @@
                             val = parser(val, format).map(v => v || '');
                         } else {
                             const [start, end] = val;
-                            if (start instanceof Date && end instanceof Date){
+                            if (start instanceof Date && end instanceof Date) {
                                 val = val.map(date => new Date(date));
-                            } else if (typeof start === 'string' && typeof end === 'string'){
+                            } else if (typeof start === 'string' && typeof end === 'string') {
                                 val = parser(val.join(RANGE_SEPARATOR), format);
-                            } else if (!start || !end){
+                            } else if (!start || !end) {
                                 val = [null, null];
                             }
                         }
                     }
-                } else if (typeof val === 'string' && type.indexOf('time') !== 0){
+                } else if (typeof val === 'string' && type.indexOf('time') !== 0) {
                     val = parser(val, format) || null;
                 }
 
-                return (isRange || this.multiple) ? (val || []) : [val];
+                return isRange || this.multiple ? val || [] : [val];
             },
-            formatDate(value){
+            formatDate(value) {
                 const format = DEFAULT_FORMATS[this.type];
 
                 if (this.multiple) {
                     const formatter = TYPE_VALUE_RESOLVER_MAP.multiple.formatter;
                     return formatter(value, this.format || format);
                 } else {
-                    const {formatter} = (
-                        TYPE_VALUE_RESOLVER_MAP[this.type] ||
-                        TYPE_VALUE_RESOLVER_MAP['default']
-                    );
+                    const { formatter } = TYPE_VALUE_RESOLVER_MAP[this.type] || TYPE_VALUE_RESOLVER_MAP['default'];
                     return formatter(value, this.format || format);
                 }
             },
             onPick(dates, visible = false, type) {
-                if (this.multiple){
+                if (this.multiple) {
                     const pickedTimeStamp = dates.getTime();
                     const indexOfPickedDate = this.internalValue.findIndex(date => date && date.getTime() === pickedTimeStamp);
                     const allDates = [...this.internalValue, dates].filter(Boolean);
@@ -671,7 +639,7 @@
                 if (!this.isConfirm) this.visible = visible;
                 this.emitChange(type);
             },
-            onPickSuccess(){
+            onPickSuccess() {
                 this.visible = false;
                 this.$emit('on-ok');
                 this.focus();
@@ -680,13 +648,13 @@
             focus() {
                 this.$refs.input && this.$refs.input.focus();
             },
-            updatePopper () {
+            updatePopper() {
                 this.$refs.drop.update();
             }
         },
         watch: {
-            visible (state) {
-                if (state === false){
+            visible(state) {
+                if (state === false) {
                     this.$refs.drop.destroy();
                 }
                 this.$refs.drop.update();
@@ -695,23 +663,23 @@
             value(val) {
                 this.internalValue = this.parseDate(val);
             },
-            open (val) {
+            open(val) {
                 this.visible = val === true;
             },
-            type(type){
+            type(type) {
                 this.onSelectionModeChange(type);
             },
-            publicVModelValue(now, before){
+            publicVModelValue(now, before) {
                 const newValue = JSON.stringify(now);
                 const oldValue = JSON.stringify(before);
                 const shouldEmitInput = newValue !== oldValue || typeof now !== typeof before;
                 if (shouldEmitInput) this.$emit('input', now); // to update v-model
-            },
+            }
         },
-        mounted () {
+        mounted() {
             const initialValue = this.value;
             const parsedValue = this.publicVModelValue;
-            if (typeof initialValue !== typeof parsedValue || JSON.stringify(initialValue) !== JSON.stringify(parsedValue)){
+            if (typeof initialValue !== typeof parsedValue || JSON.stringify(initialValue) !== JSON.stringify(parsedValue)) {
                 this.$emit('input', this.publicVModelValue); // to update v-model
             }
             if (this.open !== null) this.visible = this.open;
