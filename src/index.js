@@ -26,6 +26,8 @@ import Poptip from './components/poptip';
 import { Select, Option, OptionGroup } from './components/select';
 import Message from './components/message';
 import Notice from './components/notice';
+import TimePicker from './components/time-picker';
+import DatePicker from './components/date-picker';
 const components = {
     Affix,
     Layout: Layout,
@@ -63,7 +65,9 @@ const components = {
     DropdownItem: Dropdown.Item,
     DropdownMenu: Dropdown.Menu,
     Poptip,
-    Tooltip
+    Tooltip,
+    DatePicker,
+    TimePicker
 };
 
 const iview = {

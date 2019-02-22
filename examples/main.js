@@ -96,6 +96,10 @@ const router = new VueRouter({
         {
             path: '/notice',
             component: resolve => require(['./routers/notice.vue'], resolve)
+        },
+        {
+            path: '/date',
+            component: resolve => require(['./routers/date.vue'], resolve)
         }
     ]
 });

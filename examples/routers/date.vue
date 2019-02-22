@@ -249,7 +249,9 @@
 
 <template>
     <div style="width: 500px;margin: 100px;">
-        <p><input type="text"></p>
+        <p>
+            <input type="text">
+        </p>
 
         <DatePicker type="month" show-week-numbers placeholder="Select date" style="width: 200px"></DatePicker>
         <DatePicker type="year" show-week-numbers placeholder="Select date" style="width: 200px"></DatePicker>
@@ -263,7 +265,5 @@
     </div>
 </template>
 <script>
-    export default {
-
-    }
+    export default {};
 </script>

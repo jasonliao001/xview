@@ -14,8 +14,8 @@
             :closable="notice.closable"
             :name="notice.name"
             :transition-name="notice.transitionName"
-            :on-close="notice.onClose">
-        </Notice>
+            :on-close="notice.onClose"
+        ></Notice>
     </div>
 </template>
 <script>
@@ -27,8 +27,8 @@
     let seed = 0;
     const now = Date.now();
 
-    function getUuid () {
-        return 'ivuNotification_' + now + '_' + (seed++);
+    function getUuid() {
+        return 'ivuNotification_' + now + '_' + seed++;
     }
 
     export default {
@@ -40,7 +40,7 @@
             },
             styles: {
                 type: Object,
-                default: function () {
+                default: function() {
                     return {
                         top: '65px',
                         left: '50%'
@@ -54,14 +54,14 @@
                 type: String
             }
         },
-        data () {
+        data() {
             return {
                 notices: [],
                 tIndex: this.handleGetIndex()
             };
         },
         computed: {
-            classes () {
+            classes() {
                 return [
                     `${this.prefixCls}`,
                     {
@@ -69,7 +69,7 @@
                     }
                 ];
             },
-            wrapStyles () {
+            wrapStyles() {
                 let styles = Object.assign({}, this.styles);
                 styles['z-index'] = 1010 + this.tIndex;
 
@@ -77,23 +77,26 @@
             }
         },
         methods: {
-            add (notice) {
+            add(notice) {
                 const name = notice.name || getUuid();
 
-                let _notice = Object.assign({
-                    styles: {
-                        right: '50%'
+                let _notice = Object.assign(
+                    {
+                        styles: {
+                            right: '50%'
+                        },
+                        content: '',
+                        duration: 1.5,
+                        closable: false,
+                        name: name
                     },
-                    content: '',
-                    duration: 1.5,
-                    closable: false,
-                    name: name
-                }, notice);
+                    notice
+                );
 
                 this.notices.push(_notice);
                 this.tIndex = this.handleGetIndex();
             },
-            close (name) {
+            close(name) {
                 const notices = this.notices;
                 for (let i = 0; i < notices.length; i++) {
                     if (notices[i].name === name) {
@@ -102,13 +105,13 @@
                     }
                 }
             },
-            closeAll () {
+            closeAll() {
                 this.notices = [];
             },
-            handleGetIndex () {
+            handleGetIndex() {
                 transferIncrease();
                 return transferIndex;
-            },
+            }
         }
     };
 </script>
