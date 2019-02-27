@@ -98,6 +98,9 @@ nav {
                 <li>
                     <router-link to="/keep-alive-test-2">keep-alive-test-2</router-link>
                 </li>
+                <li>
+                    <router-link to="/keep-alive-test-is">keep-alive-test-is</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>
@@ -245,7 +248,11 @@ nav {
                 </li>-->
             </ul>
         </nav>
-        <router-view></router-view>
+        <!-- <router-view></router-view> -->
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
 </template>
 <script>

@@ -99,6 +99,7 @@ const router = new VueRouter({
         },
         {
             path: '/date',
+
             component: resolve => require(['./routers/date.vue'], resolve)
         },
         {
@@ -110,10 +111,15 @@ const router = new VueRouter({
         },
         {
             path: '/keep-alive-test-2',
+
             component: resolve => require(['./routers/keep-alive-test-2.vue'], resolve),
             meta: {
                 keepAlive: false // 需要被缓存
             }
+        },
+        {
+            path: '/keep-alive-test-is',
+            component: resolve => require(['./routers/keep-alive-test-is.vue'], resolve)
         }
     ]
 });
