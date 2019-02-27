@@ -92,6 +92,12 @@ nav {
                 <li>
                     <router-link to="/date">Date</router-link>
                 </li>
+                <li>
+                    <router-link to="/keep-alive-test-1">keep-alive-test-1</router-link>
+                </li>
+                <li>
+                    <router-link to="/keep-alive-test-2">keep-alive-test-2</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>
