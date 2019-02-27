@@ -80,6 +80,7 @@
     const pickerPrefixCls = 'ivu-picker';
 
     const isEmptyArray = val => val.reduce((isEmpty, str) => (isEmpty && !str) || (typeof str === 'string' && str.trim() === ''), true);
+
     const keyValueMapper = {
         40: 'up',
         39: 'right',
@@ -272,6 +273,7 @@
         },
         methods: {
             onSelectionModeChange(type) {
+                console.log('onSelectModeChange');
                 if (type.match(/^date/)) type = 'date';
                 this.selectionMode = oneOf(type, ['year', 'month', 'date', 'time']) && type;
                 return this.selectionMode;

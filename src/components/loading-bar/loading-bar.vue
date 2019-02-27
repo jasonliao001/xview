@@ -9,10 +9,6 @@
     const prefixCls = 'ivu-loading-bar';
     export default {
         props: {
-            //            percent: {
-            //                type: Number,
-            //                default: 0
-            //            },
             color: {
                 type: String,
                 default: 'primary'
@@ -25,17 +21,6 @@
                 type: Number,
                 default: 2
             }
-            //            status: {
-            //                type: String,
-            //                validator (value) {
-            //                    return oneOf(value, ['success', 'error']);
-            //                },
-            //                default: 'success'
-            //            },
-            //            show: {
-            //                type: Boolean,
-            //                default: false
-            //            }
         },
         data() {
             return {
