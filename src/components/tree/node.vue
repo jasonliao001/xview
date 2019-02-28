@@ -16,6 +16,7 @@
                 <Render v-if="data.render" :render="data.render" :data="data" :node="node"></Render>
                 <Render v-else-if="isParentRender" :render="parentRender" :data="data" :node="node"></Render>
                 <span v-else :class="titleClasses" @click="handleSelect">{{ data.title }}</span>
+
                 <Tree-node
                     v-if="data.expand"
                     v-for="(item, i) in children"
@@ -131,7 +132,6 @@
             handleExpand() {
                 const item = this.data;
                 if (item.disabled) return;
-
                 // async loading
                 if (item[this.childrenKey].length === 0) {
                     const tree = findComponentUpward(this, 'Tree');

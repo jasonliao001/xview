@@ -124,6 +124,10 @@ const router = new VueRouter({
         {
             path: '/tree',
             component: resolve => require(['./routers/tree.vue'], resolve)
+        },
+        {
+            path: '/table',
+            component: resolve => require(['./routers/table.vue'], resolve)
         }
     ]
 });

@@ -29,6 +29,8 @@ import Notice from './components/notice';
 import TimePicker from './components/time-picker';
 import DatePicker from './components/date-picker';
 import Tree from './components/tree';
+import Table from './components/table';
+import Spin from './components/spin';
 const components = {
     Affix,
     Layout: Layout,
@@ -69,7 +71,9 @@ const components = {
     Tooltip,
     DatePicker,
     TimePicker,
-    Tree
+    Tree,
+    Table,
+    Spin
 };
 
 const iview = {
@@ -86,8 +90,8 @@ const iview = {
     iOption: Option,
     // iProgress: Progress,
     iSelect: Select,
-    iSwitch: Switch
-    // iTable: Table,
+    iSwitch: Switch,
+    iTable: Table
     // iTime: Time
 };
 

@@ -65,6 +65,7 @@
             data: {
                 deep: true,
                 handler() {
+                    console.log('----data改变');
                     this.stateTree = this.data;
                     this.flatState = this.compileFlatState();
                     this.rebuildTree();
@@ -81,24 +82,32 @@
             }
         },
         methods: {
+            // 合成平整数据状态（能够让父子产生关联）
             compileFlatState() {
                 // so we have always a relation parent/children of each node
                 let keyCounter = 0;
+
                 let childrenKey = this.childrenKey;
+
                 const flatTree = [];
+
                 function flattenChildren(node, parent) {
-                    node.nodeKey = keyCounter++;
+                    node.nodeKey = keyCounter++; //会更改原数据
+
                     flatTree[node.nodeKey] = { node: node, nodeKey: node.nodeKey };
+
                     if (typeof parent != 'undefined') {
                         flatTree[node.nodeKey].parent = parent.nodeKey;
+
                         flatTree[parent.nodeKey][childrenKey].push(node.nodeKey);
                     }
-
                     if (node[childrenKey]) {
                         flatTree[node.nodeKey][childrenKey] = [];
+
                         node[childrenKey].forEach(child => flattenChildren(child, node));
                     }
                 }
+
                 this.stateTree.forEach(rootNode => {
                     flattenChildren(rootNode);
                 });
@@ -121,6 +130,7 @@
                 }
                 this.updateTreeUp(parentKey);
             },
+
             rebuildTree() {
                 // only called when `data` prop changes
                 const checkedNodes = this.getCheckedNodes();

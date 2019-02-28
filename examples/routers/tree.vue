@@ -202,21 +202,21 @@
 <template>
     <div>
         {{ data1 }}
-        <Tree :data="data1"></Tree>
+        <Tree :data="data1" @on-select-change="getSelectedNodes" show-checkbox multiple></Tree>
     </div>
 </template>
 <script>
     export default {
-        data () {
+        data() {
             return {
                 data1: [
                     {
                         title: 'parent 1',
-                        expand: true,
+                        // expand: true,
                         children: [
                             {
                                 title: 'parent 1-1',
-                                expand: true,
+                                // expand: true,
                                 children: [
                                     {
                                         title: 'leaf 1-1-1'
@@ -228,7 +228,37 @@
                             },
                             {
                                 title: 'parent 1-2',
-                                expand: true,
+                                // expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-2-1'
+                                    },
+                                    {
+                                        title: 'leaf 1-2-1'
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: 'parent 2',
+                        // expand: true,
+                        children: [
+                            {
+                                title: 'parent 2-1',
+                                // expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-1-1'
+                                    },
+                                    {
+                                        title: 'leaf 1-1-2'
+                                    }
+                                ]
+                            },
+                            {
+                                title: 'parent 2-2',
+                                // expand: true,
                                 children: [
                                     {
                                         title: 'leaf 1-2-1'
@@ -240,8 +270,14 @@
                             }
                         ]
                     }
-                ]
+                ],
+                data2: []
+            };
+        },
+        methods: {
+            getSelectedNodes(callback, node) {
+                console.log(callback);
             }
         }
-    }
+    };
 </script>
