@@ -14,6 +14,8 @@
 
 5.less？
 
+6.(前端异常监控解决方案研究)[https://cdc.tencent.com/2018/09/13/frontend-exception-monitor-research/]
+
 ## 常见问题？
 
 记录在 issues 中
