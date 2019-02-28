@@ -273,7 +273,6 @@
         },
         methods: {
             onSelectionModeChange(type) {
-                console.log('onSelectModeChange');
                 if (type.match(/^date/)) type = 'date';
                 this.selectionMode = oneOf(type, ['year', 'month', 'date', 'time']) && type;
                 return this.selectionMode;
@@ -679,6 +678,7 @@
             }
         },
         mounted() {
+            console.log(this.panel);
             const initialValue = this.value;
             const parsedValue = this.publicVModelValue;
             if (typeof initialValue !== typeof parsedValue || JSON.stringify(initialValue) !== JSON.stringify(parsedValue)) {

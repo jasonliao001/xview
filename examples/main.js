@@ -120,6 +120,10 @@ const router = new VueRouter({
         {
             path: '/keep-alive-test-is',
             component: resolve => require(['./routers/keep-alive-test-is.vue'], resolve)
+        },
+        {
+            path: '/tree',
+            component: resolve => require(['./routers/tree.vue'], resolve)
         }
     ]
 });

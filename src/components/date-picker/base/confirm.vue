@@ -1,14 +1,15 @@
 <template>
     <div :class="[prefixCls + '-confirm']" @keydown.tab.capture="handleTab">
-        <i-button :class="timeClasses" size="small" type="text" :disabled="timeDisabled" v-if="showTime" @click="handleToggleTime">
-            {{labels.time}}
-        </i-button>
-        <i-button size="small" @click.native="handleClear" @keydown.enter.native="handleClear">
-            {{labels.clear}}
-        </i-button>
-        <i-button size="small" type="primary" @click.native="handleSuccess" @keydown.enter.native="handleSuccess">
-            {{labels.ok}}
-        </i-button>
+        <i-button
+            :class="timeClasses"
+            size="small"
+            type="text"
+            :disabled="timeDisabled"
+            v-if="showTime"
+            @click="handleToggleTime"
+        >{{labels.time}}</i-button>
+        <i-button size="small" @click.native="handleClear" @keydown.enter.native="handleClear">{{labels.clear}}</i-button>
+        <i-button size="small" type="primary" @click.native="handleSuccess" @keydown.enter.native="handleSuccess">{{labels.ok}}</i-button>
     </div>
 </template>
 <script>
@@ -20,7 +21,7 @@
 
     export default {
         mixins: [Locale, Emitter],
-        components: {iButton},
+        components: { iButton },
         props: {
             showTime: false,
             isTime: false,
@@ -32,12 +33,12 @@
             };
         },
         computed: {
-            timeClasses () {
-                return  `${prefixCls}-confirm-time`;
+            timeClasses() {
+                return `${prefixCls}-confirm-time`;
             },
-            labels(){
+            labels() {
                 const labels = ['time', 'clear', 'ok'];
-                const values = [(this.isTime ? 'selectDate' : 'selectTime'), 'clear', 'ok'];
+                const values = [this.isTime ? 'selectDate' : 'selectTime', 'clear', 'ok'];
                 return labels.reduce((obj, key, i) => {
                     obj[key] = this.t('i.datepicker.' + values[i]);
                     return obj;
@@ -45,13 +46,13 @@
             }
         },
         methods: {
-            handleClear () {
+            handleClear() {
                 this.$emit('on-pick-clear');
             },
-            handleSuccess () {
+            handleSuccess() {
                 this.$emit('on-pick-success');
             },
-            handleToggleTime () {
+            handleToggleTime() {
                 if (this.timeDisabled) return;
                 this.$emit('on-pick-toggle-time');
                 this.dispatch('CalendarPicker', 'focus-input');

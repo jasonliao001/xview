@@ -101,6 +101,9 @@ nav {
                 <li>
                     <router-link to="/keep-alive-test-is">keep-alive-test-is</router-link>
                 </li>
+                <li>
+                    <router-link to="/tree">tree</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>

@@ -4,6 +4,7 @@
             <div :class="[prefixCls + '-shortcut']" v-for="shortcut in shortcuts" @click="handleShortcutClick(shortcut)">{{ shortcut.text }}</div>
         </div>
         <div :class="[prefixCls + '-body']">
+            <!-- 2019年8月 -->
             <div :class="[datePrefixCls + '-header']" v-show="currentView !== 'time'">
                 <span :class="iconBtnCls('prev', '-double')" @click="changeYear(-1)">
                     <Icon type="ios-arrow-back"></Icon>
@@ -33,6 +34,7 @@
                     <Icon type="ios-arrow-forward"></Icon>
                 </span>
             </div>
+            <!-- 内容区域   日期-->
             <div :class="[prefixCls + '-content']">
                 <component
                     :is="pickerTable"
@@ -48,6 +50,7 @@
                     @on-pick-click="handlePickClick"
                 ></component>
             </div>
+            <!-- 内容区域   时间-->
             <div :class="[prefixCls + '-content']" v-show="isTime">
                 <time-picker
                     ref="timePicker"
@@ -65,6 +68,7 @@
                     @on-pick-toggle-time="handleToggleTime"
                 ></time-picker>
             </div>
+            <!-- 按钮区域 -->
             <Confirm
                 v-if="confirm"
                 :show-time="showTime"

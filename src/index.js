@@ -28,6 +28,7 @@ import Message from './components/message';
 import Notice from './components/notice';
 import TimePicker from './components/time-picker';
 import DatePicker from './components/date-picker';
+import Tree from './components/tree';
 const components = {
     Affix,
     Layout: Layout,
@@ -67,7 +68,8 @@ const components = {
     Poptip,
     Tooltip,
     DatePicker,
-    TimePicker
+    TimePicker,
+    Tree
 };
 
 const iview = {

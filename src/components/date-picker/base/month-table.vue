@@ -1,12 +1,6 @@
 <template>
     <div :class="classes">
-        <span
-            :class="getCellCls(cell)"
-            v-for="cell in cells"
-            @click="handleClick(cell)"
-            @mouseenter="handleMouseMove(cell)"
-
-        >
+        <span :class="getCellCls(cell)" v-for="cell in cells" @click="handleClick(cell)" @mouseenter="handleMouseMove(cell)">
             <em>{{ cell.text }}</em>
         </span>
     </div>
@@ -19,16 +13,15 @@
     import prefixCls from './prefixCls';
 
     export default {
-        mixins: [ Locale, mixin ],
-        props: {/* in mixin */},
+        mixins: [Locale, mixin],
+        props: {
+            /* in mixin */
+        },
         computed: {
             classes() {
-                return [
-                    `${prefixCls}`,
-                    `${prefixCls}-month`
-                ];
+                return [`${prefixCls}`, `${prefixCls}-month`];
             },
-            cells () {
+            cells() {
                 let cells = [];
                 const cell_tmpl = {
                     text: '',
@@ -55,7 +48,7 @@
             }
         },
         methods: {
-            getCellCls (cell) {
+            getCellCls(cell) {
                 return [
                     `${prefixCls}-cell`,
                     {
@@ -66,7 +59,7 @@
                     }
                 ];
             },
-            tCell (nr) {
+            tCell(nr) {
                 return this.t(`i.datepicker.months.m${nr}`);
             }
         }
