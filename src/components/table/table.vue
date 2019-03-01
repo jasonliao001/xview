@@ -683,6 +683,7 @@
                     $body.scrollLeft = $body.scrollLeft - 10;
                 }
             },
+            // 数据排序
             sortData(data, type, index) {
                 const key = this.cloneColumns[index].key;
                 data.sort((a, b) => {
@@ -723,11 +724,12 @@
                 // clear checked that not filter now
                 if (!this.cloneColumns[index]._isFiltered) this.cloneColumns[index]._filterChecked = [];
             },
+            // 过滤数据
             filterData(data, column) {
                 return data.filter(row => {
-                    //如果定义了远程过滤方法则忽略此方法
+                    // 如果定义了远程过滤方法则忽略此方法
                     if (typeof column.filterRemote === 'function') return true;
-
+                    // 如果不是filterRemote，则使用本地的过滤方法
                     let status = !column._filterChecked.length;
                     for (let i = 0; i < column._filterChecked.length; i++) {
                         status = column.filterMethod(column._filterChecked[i], row);
@@ -787,6 +789,7 @@
                 this.rebuildData = filterData;
                 this.$emit('on-filter-change', this.cloneColumns[index]);
             },
+            // 处理数据
             makeData() {
                 let data = deepCopy(this.data);
                 data.forEach((row, index) => {
@@ -795,6 +798,7 @@
                 });
                 return data;
             },
+            // 处理数据使用排序
             makeDataWithSort() {
                 let data = this.makeData();
                 let sortType = 'normal';
@@ -817,11 +821,13 @@
                 this.cloneColumns.forEach(col => (data = this.filterData(data, col)));
                 return data;
             },
+            // 数据排序和过滤
             makeDataWithSortAndFilter() {
                 let data = this.makeDataWithSort();
                 this.cloneColumns.forEach(col => (data = this.filterData(data, col)));
                 return data;
             },
+            // 处理对象数据
             makeObjData() {
                 let data = {};
                 this.data.forEach((row, index) => {
@@ -889,7 +895,7 @@
                     if ('sortType' in column) {
                         column._sortType = column.sortType;
                     }
-
+                    // 如果左右有固定内容的时候处理
                     if (column.fixed && column.fixed === 'left') {
                         left.push(column);
                     } else if (column.fixed && column.fixed === 'right') {
@@ -900,6 +906,7 @@
                 });
                 return left.concat(center).concat(right);
             },
+            //
             // create a multiple table-head
             makeColumnRows(fixedType, cols) {
                 return convertToRows(cols, fixedType);

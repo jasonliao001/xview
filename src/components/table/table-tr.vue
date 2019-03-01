@@ -1,5 +1,7 @@
 <template>
-    <tr :class="rowClasses(row._index)"><slot></slot></tr>
+    <tr :class="rowClasses(row._index)">
+        <slot></slot>
+    </tr>
 </template>
 <script>
     export default {
@@ -8,12 +10,12 @@
             prefixCls: String
         },
         computed: {
-            objData () {
+            objData() {
                 return this.$parent.objData;
             }
         },
         methods: {
-            rowClasses (_index) {
+            rowClasses(_index) {
                 return [
                     `${this.prefixCls}-row`,
                     this.rowClsName(_index),
@@ -23,9 +25,10 @@
                     }
                 ];
             },
-            rowClsName (_index) {
+            rowClsName(_index) {
                 return this.$parent.$parent.rowClassName(this.objData[_index], _index);
-            },
+            }
         }
     };
 </script>
+

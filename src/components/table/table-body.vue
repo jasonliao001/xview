@@ -12,7 +12,8 @@
                     @mouseenter.native.stop="handleMouseIn(row._index)"
                     @mouseleave.native.stop="handleMouseOut(row._index)"
                     @click.native="clickCurrentRow(row._index)"
-                    @dblclick.native.stop="dblclickCurrentRow(row._index)">
+                    @dblclick.native.stop="dblclickCurrentRow(row._index)"
+                >
                     <td v-for="column in columns" :class="alignCls(column, row)">
                         <table-cell
                             :fixed="fixed"
@@ -46,13 +47,13 @@
 
     export default {
         name: 'TableBody',
-        mixins: [ Mixin ],
+        mixins: [Mixin],
         components: { TableCell, Expand, TableTr },
         props: {
             prefixCls: String,
             styleObject: Object,
             columns: Array,
-            data: Array,    // rebuildData
+            data: Array, // rebuildData
             objData: Object,
             columnsWidth: Object,
             fixed: {
@@ -61,8 +62,8 @@
             }
         },
         computed: {
-            expandRender () {
-                let render = function () {
+            expandRender() {
+                let render = function() {
                     return '';
                 };
                 for (let i = 0; i < this.columns.length; i++) {
@@ -75,25 +76,25 @@
             }
         },
         methods: {
-            rowChecked (_index) {
+            rowChecked(_index) {
                 return this.objData[_index] && this.objData[_index]._isChecked;
             },
-            rowDisabled(_index){
+            rowDisabled(_index) {
                 return this.objData[_index] && this.objData[_index]._isDisabled;
             },
-            rowExpanded(_index){
+            rowExpanded(_index) {
                 return this.objData[_index] && this.objData[_index]._isExpanded;
             },
-            handleMouseIn (_index) {
+            handleMouseIn(_index) {
                 this.$parent.handleMouseIn(_index);
             },
-            handleMouseOut (_index) {
+            handleMouseOut(_index) {
                 this.$parent.handleMouseOut(_index);
             },
-            clickCurrentRow (_index) {
+            clickCurrentRow(_index) {
                 this.$parent.clickCurrentRow(_index);
             },
-            dblclickCurrentRow (_index) {
+            dblclickCurrentRow(_index) {
                 this.$parent.dblclickCurrentRow(_index);
             }
         }

@@ -107,6 +107,9 @@ nav {
                 <li>
                     <router-link to="/table">table</router-link>
                 </li>
+                <li>
+                    <router-link to="/table-v2">table-v2</router-link>
+                </li>
                 <!-- <li>
                     <router-link to="/anchor">Anchor</router-link>
                 </li>
