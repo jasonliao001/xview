@@ -7,6 +7,7 @@ export default {
         node: Array
     },
     render: (h, ctx) => {
+        console.log(ctx);
         const params = {
             root: ctx.props.node[0],
             node: ctx.props.node[1],

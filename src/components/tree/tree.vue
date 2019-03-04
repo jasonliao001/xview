@@ -65,7 +65,6 @@
             data: {
                 deep: true,
                 handler() {
-                    console.log('----data改变');
                     this.stateTree = this.data;
                     this.flatState = this.compileFlatState();
                     this.rebuildTree();
@@ -86,28 +85,20 @@
             compileFlatState() {
                 // so we have always a relation parent/children of each node
                 let keyCounter = 0;
-
                 let childrenKey = this.childrenKey;
-
                 const flatTree = [];
-
                 function flattenChildren(node, parent) {
-                    node.nodeKey = keyCounter++; //会更改原数据
-
+                    node.nodeKey = keyCounter++;
                     flatTree[node.nodeKey] = { node: node, nodeKey: node.nodeKey };
-
                     if (typeof parent != 'undefined') {
                         flatTree[node.nodeKey].parent = parent.nodeKey;
-
                         flatTree[parent.nodeKey][childrenKey].push(node.nodeKey);
                     }
                     if (node[childrenKey]) {
                         flatTree[node.nodeKey][childrenKey] = [];
-
                         node[childrenKey].forEach(child => flattenChildren(child, node));
                     }
                 }
-
                 this.stateTree.forEach(rootNode => {
                     flattenChildren(rootNode);
                 });
@@ -116,7 +107,6 @@
             updateTreeUp(nodeKey) {
                 const parentKey = this.flatState[nodeKey].parent;
                 if (typeof parentKey == 'undefined' || this.checkStrictly) return;
-
                 const node = this.flatState[nodeKey].node;
                 const parent = this.flatState[parentKey].node;
                 if (node.checked == parent.checked && node.indeterminate == parent.indeterminate) return; // no need to update upwards
@@ -132,6 +122,7 @@
             },
 
             rebuildTree() {
+                console.log('rebuildTree');
                 // only called when `data` prop changes
                 const checkedNodes = this.getCheckedNodes();
                 checkedNodes.forEach(node => {
@@ -186,10 +177,8 @@
                 const node = this.flatState[nodeKey].node;
                 this.$set(node, 'checked', checked);
                 this.$set(node, 'indeterminate', false);
-
                 this.updateTreeUp(nodeKey); // propagate up
                 this.updateTreeDown(node, { checked, indeterminate: false }); // reset `indeterminate` when going down
-
                 this.$emit('on-check-change', this.getCheckedNodes(), node);
             }
         },

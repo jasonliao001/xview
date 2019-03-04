@@ -31,6 +31,7 @@ import DatePicker from './components/date-picker';
 import Tree from './components/tree';
 import Table from './components/table';
 import Spin from './components/spin';
+import TreeV2 from './components/treeV2.vue';
 const components = {
     Affix,
     Layout: Layout,
@@ -72,6 +73,7 @@ const components = {
     DatePicker,
     TimePicker,
     Tree,
+    TreeV2,
     Table,
     Spin
 };

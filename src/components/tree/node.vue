@@ -2,6 +2,7 @@
     <collapse-transition>
         <ul :class="classes">
             <li>
+                <!-- 显示图标类 -->
                 <span :class="arrowClasses" @click="handleExpand">
                     <Icon v-if="showArrow" type="ios-arrow-forward"></Icon>
                     <Icon v-if="showLoading" type="ios-loading" class="ivu-load-loop"></Icon>
@@ -16,7 +17,6 @@
                 <Render v-if="data.render" :render="data.render" :data="data" :node="node"></Render>
                 <Render v-else-if="isParentRender" :render="parentRender" :data="data" :node="node"></Render>
                 <span v-else :class="titleClasses" @click="handleSelect">{{ data.title }}</span>
-
                 <Tree-node
                     v-if="data.expand"
                     v-for="(item, i) in children"
