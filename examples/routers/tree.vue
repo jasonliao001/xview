@@ -200,22 +200,37 @@
 <!--</script>-->
 
 <template>
-    <div>
+    <!-- <div>
         {{ data1 }}
-        <Tree :data="data1" @on-select-change="getSelectedNodes" show-checkbox multiple></Tree>
+            <Tree :data="data1" @on-select-change="getSelectedNodes" show-checkbox multiple></Tree>
         <TreeV2></TreeV2>
+    </div>-->
+    <div>
+        <Tree :data="data5" :render="renderContent"></Tree>
+        <functional :list="list" v-bind="data" v-on="data.on"></functional>
     </div>
-    <!-- <Tree :data="data5" :render="renderContent"></Tree> -->
 </template>
 <script>
+    import functional from './functional.vue';
     export default {
+        components: { functional },
         data() {
             return {
+                list: [1, 2, 2, 3, 3, 4, 4],
+                data: {
+                    class: 'red',
+                    on: {
+                        click: e => {
+                            console.log(e);
+                        }
+                    }
+                },
                 data5: [
                     {
                         title: 'parent 1',
                         expand: true,
                         render: (h, { root, node, data }) => {
+                            console.log('render');
                             return h(
                                 'span',
                                 {
@@ -257,6 +272,16 @@
                                                 on: {
                                                     click: () => {
                                                         this.append(data);
+                                                    }
+                                                }
+                                            }),
+                                            h('Button', {
+                                                props: Object.assign({}, this.buttonProps, {
+                                                    icon: 'ios-remove'
+                                                }),
+                                                on: {
+                                                    click: () => {
+                                                        this.remove(root, node, data);
                                                     }
                                                 }
                                             })
@@ -368,11 +393,10 @@
         },
         methods: {
             getSelectedNodes(callback, node) {
-                // console.log(callback);
                 node.expand = !node.expand;
-                console.log(callback, node);
             },
             renderContent(h, { root, node, data }) {
+                console.log('renderContent');
                 return h(
                     'span',
                     {
@@ -440,6 +464,9 @@
                 this.$set(data, 'children', children);
             },
             remove(root, node, data) {
+                console.log('root :', root);
+                console.log('data :', data);
+                console.log('node :', node);
                 const parentKey = root.find(el => el === node).parent;
                 const parent = root.find(el => el.nodeKey === parentKey).node;
                 const index = parent.children.indexOf(data);

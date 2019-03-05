@@ -110,7 +110,6 @@
                 const node = this.flatState[nodeKey].node;
                 const parent = this.flatState[parentKey].node;
                 if (node.checked == parent.checked && node.indeterminate == parent.indeterminate) return; // no need to update upwards
-
                 if (node.checked == true) {
                     this.$set(parent, 'checked', parent[this.childrenKey].every(node => node.checked));
                     this.$set(parent, 'indeterminate', !parent.checked);
@@ -122,7 +121,6 @@
             },
 
             rebuildTree() {
-                console.log('rebuildTree');
                 // only called when `data` prop changes
                 const checkedNodes = this.getCheckedNodes();
                 checkedNodes.forEach(node => {
@@ -137,7 +135,6 @@
                     }
                 });
             },
-
             getSelectedNodes() {
                 /* public API */
                 return this.flatState.filter(obj => obj.node.selected).map(obj => obj.node);
@@ -152,7 +149,6 @@
             },
             updateTreeDown(node, changes = {}) {
                 if (this.checkStrictly) return;
-
                 for (let key in changes) {
                     this.$set(node, key, changes[key]);
                 }

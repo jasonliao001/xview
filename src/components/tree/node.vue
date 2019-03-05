@@ -14,9 +14,11 @@
                     :disabled="data.disabled || data.disableCheckbox"
                     @click.native.prevent="handleCheck"
                 ></Checkbox>
+                <!-- 中间内容 -->
                 <Render v-if="data.render" :render="data.render" :data="data" :node="node"></Render>
                 <Render v-else-if="isParentRender" :render="parentRender" :data="data" :node="node"></Render>
                 <span v-else :class="titleClasses" @click="handleSelect">{{ data.title }}</span>
+                <!-- 中间内容 -->
                 <Tree-node
                     v-if="data.expand"
                     v-for="(item, i) in children"
@@ -104,10 +106,12 @@
                 return 'loading' in this.data && this.data.loading;
             },
             isParentRender() {
+                console.log('methods: isParenteRender');
                 const Tree = findComponentUpward(this, 'Tree');
                 return Tree && Tree.render;
             },
             parentRender() {
+                console.log('methods:parentRender');
                 const Tree = findComponentUpward(this, 'Tree');
                 if (Tree && Tree.render) {
                     return Tree.render;
@@ -165,6 +169,7 @@
                 };
                 this.dispatch('Tree', 'on-check', changes);
             }
-        }
+        },
+        mounted() {}
     };
 </script>

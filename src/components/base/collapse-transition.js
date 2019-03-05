@@ -4,7 +4,6 @@ import { addClass, removeClass } from '../../utils/assist';
 // https://cn.vuejs.org/v2/guide/transitions.html
 const Transition = {
     beforeEnter(el) {
-        console.log('beforeEnter');
         addClass(el, 'collapse-transition');
         if (!el.dataset) el.dataset = {};
         el.dataset.oldPaddingTop = el.style.paddingTop;
@@ -31,7 +30,6 @@ const Transition = {
     },
 
     afterEnter(el) {
-        console.log('afterEnter');
         // for safari: remove class then reset height is necessary
         removeClass(el, 'collapse-transition');
         el.style.height = '';
@@ -39,7 +37,6 @@ const Transition = {
     },
 
     beforeLeave(el) {
-        console.log('beforeleave');
         if (!el.dataset) el.dataset = {};
         el.dataset.oldPaddingTop = el.style.paddingTop;
         el.dataset.oldPaddingBottom = el.style.paddingBottom;
@@ -50,7 +47,6 @@ const Transition = {
     },
 
     leave(el) {
-        console.log('leave');
         if (el.scrollHeight !== 0) {
             // for safari: add class after set height, or it will jump to zero height suddenly, weired
             addClass(el, 'collapse-transition');
@@ -61,7 +57,6 @@ const Transition = {
     },
 
     afterLeave(el) {
-        console.log('afterLeave');
         removeClass(el, 'collapse-transition');
         el.style.height = '';
         el.style.overflow = el.dataset.oldOverflow;
