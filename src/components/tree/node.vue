@@ -106,12 +106,10 @@
                 return 'loading' in this.data && this.data.loading;
             },
             isParentRender() {
-                console.log('methods: isParenteRender');
                 const Tree = findComponentUpward(this, 'Tree');
                 return Tree && Tree.render;
             },
             parentRender() {
-                console.log('methods:parentRender');
                 const Tree = findComponentUpward(this, 'Tree');
                 if (Tree && Tree.render) {
                     return Tree.render;
@@ -133,6 +131,7 @@
             }
         },
         methods: {
+            // 处理展开
             handleExpand() {
                 const item = this.data;
                 if (item.disabled) return;
@@ -141,6 +140,7 @@
                     const tree = findComponentUpward(this, 'Tree');
                     if (tree && tree.loadData) {
                         this.$set(this.data, 'loading', true);
+                        // 只要将异步返回的处理$set到data
                         tree.loadData(item, children => {
                             this.$set(this.data, 'loading', false);
                             if (children.length) {
@@ -151,7 +151,7 @@
                         return;
                     }
                 }
-
+                // 有children的需要设置
                 if (item[this.childrenKey] && item[this.childrenKey].length) {
                     this.$set(this.data, 'expand', !this.data.expand);
                     this.dispatch('Tree', 'toggle-expand', this.data);

@@ -47,9 +47,11 @@
                 type: String,
                 default: 'children'
             },
+            // 异步加载数据的方法
             loadData: {
                 type: Function
             },
+            // function 自定义渲染内容
             render: {
                 type: Function
             }
@@ -57,8 +59,8 @@
         data() {
             return {
                 prefixCls: prefixCls,
-                stateTree: this.data,
-                flatState: []
+                stateTree: this.data, //复制一份数据
+                flatState: [] //平整的数据
             };
         },
         watch: {
@@ -87,6 +89,7 @@
                 let keyCounter = 0;
                 let childrenKey = this.childrenKey;
                 const flatTree = [];
+                // 让所有的父子级关联起来
                 function flattenChildren(node, parent) {
                     node.nodeKey = keyCounter++;
                     flatTree[node.nodeKey] = { node: node, nodeKey: node.nodeKey };
@@ -104,6 +107,7 @@
                 });
                 return flatTree;
             },
+            // 向上更新树
             updateTreeUp(nodeKey) {
                 const parentKey = this.flatState[nodeKey].parent;
                 if (typeof parentKey == 'undefined' || this.checkStrictly) return;
@@ -147,6 +151,7 @@
                 /* public API */
                 return this.flatState.filter(obj => obj.node.checked || obj.node.indeterminate).map(obj => obj.node);
             },
+            // 向下更新树
             updateTreeDown(node, changes = {}) {
                 if (this.checkStrictly) return;
                 for (let key in changes) {
@@ -158,6 +163,7 @@
                     });
                 }
             },
+            // 处理选中
             handleSelect(nodeKey) {
                 const node = this.flatState[nodeKey].node;
                 if (!this.multiple) {
@@ -169,6 +175,7 @@
 
                 this.$emit('on-select-change', this.getSelectedNodes(), node);
             },
+            // 处理check
             handleCheck({ checked, nodeKey }) {
                 const node = this.flatState[nodeKey].node;
                 this.$set(node, 'checked', checked);

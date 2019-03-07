@@ -1,8 +1,10 @@
 <template>
     <div :class="[prefixCls]" @mouseenter="handleShowPopper" @mouseleave="handleClosePopper">
+        <!-- 需要相对定位的声明 -->
         <div :class="[prefixCls + '-rel']" ref="reference">
             <slot></slot>
         </div>
+        <!-- 弹出层 -->
         <transition name="fade">
             <div
                 :class="[prefixCls + '-popper', prefixCls + '-' + theme]"

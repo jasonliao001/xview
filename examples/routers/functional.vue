@@ -13,6 +13,9 @@
             list: {
                 type: Array
             }
+        },
+        render(h, ctx) {
+            console.log('this is methods of render-----------');
         }
     };
 </script>

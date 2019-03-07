@@ -14,15 +14,15 @@
 </template>
 <script>
     export default {
-        data () {
+        data() {
             return {
                 text: 'Tooltip 文字提示'
             };
         },
         methods: {
-            handleChange () {
-                this.text = '提示'
+            handleChange() {
+                this.text = '提示';
             }
         }
-    }
+    };
 </script>

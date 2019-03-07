@@ -4,18 +4,38 @@
 
 ## 构建工程常见的问题？
 
+### 常见
+
 1.vscode 设置？团队遵循统一的代码风格
 
-2.如何处理国际化？
+### 业务类
 
-3.Glup？
+1. 国际化处理？
 
-4.webpack？
+2. 响应式布局？
 
-5.less？
+### 技术选型
 
-6.[前端异常监控解决方案研究](https://cdc.tencent.com/2018/09/13/frontend-exception-monitor-research/)
+1. 构建工具的选择
+    - Grunt
+    - Gulp
+    - webpack
+    - Rollup
+2. 前端框架
+    - Vue
+    - React
+    - Angularjs
+3. UI 库
+    - [UI](https://github.com/jaywcjlove/awesome-uikit)
+4. style
+    - css
+    - less
+    - sass
 
 ## 常见问题？
 
 记录在 issues 中
+
+## 其他
+
+1.[前端异常监控解决方案研究](https://cdc.tencent.com/2018/09/13/frontend-exception-monitor-research/)
