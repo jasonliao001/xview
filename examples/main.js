@@ -128,10 +128,6 @@ const router = new VueRouter({
         {
             path: '/table',
             component: resolve => require(['./routers/table.vue'], resolve)
-        },
-        {
-            path: '/table-v2',
-            component: resolve => require(['./routers/table-v2.vue'], resolve)
         }
     ]
 });

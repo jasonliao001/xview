@@ -1,7 +1,10 @@
 <template>
     <div>
         <Table ref="currentRowTable" stripe :columns="columns3" :data="data1"></Table>
+
         <Button @click="handleClearCurrentRow">Clear</Button>
+
+        <tableV2></tableV2>
     </div>
 </template>
 <script>
@@ -13,13 +16,15 @@
                         type: 'index',
                         width: 60,
                         align: 'center',
+                        fixed: 'left',
                         indexMethod(row) {
                             return row._index;
                         }
                     },
                     {
                         title: 'Name',
-                        key: 'name'
+                        key: 'name',
+                        width: 100
                     },
                     {
                         title: 'Age',

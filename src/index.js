@@ -32,6 +32,7 @@ import Tree from './components/tree';
 import Table from './components/table';
 import Spin from './components/spin';
 import TreeV2 from './components/treeV2.vue';
+import tableV2 from './components/tableV2';
 const components = {
     Affix,
     Layout: Layout,
@@ -75,7 +76,8 @@ const components = {
     Tree,
     TreeV2,
     Table,
-    Spin
+    Spin,
+    tableV2: tableV2
 };
 
 const iview = {

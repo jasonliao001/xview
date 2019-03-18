@@ -1,6 +1,7 @@
 .ease-motion(@className, @keyframeName) {
     .make-motion(@className, @keyframeName);
-    .@{className}-enter-active, .@{className}-appear {
+    .@{className}-enter-active,
+    .@{className}-appear {
         opacity: 0;
         animation-timing-function: linear;
         animation-duration: @transition-time;

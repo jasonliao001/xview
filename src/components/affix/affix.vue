@@ -20,11 +20,12 @@
         const method = top ? 'scrollTop' : 'scrollLeft';
 
         let ret = target[prop];
-        // 对于不支持的pageYOffset typeof window.pageYOffset === undefined
+        // 对于不支持的pageYOffset typeof window.pageYOffset === undefined =====
         if (typeof ret !== 'number') {
             ret = window.document.documentElement[method];
         }
         return ret;
+        console.log('this');
     }
 
     function getOffset(element) {

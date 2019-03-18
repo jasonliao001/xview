@@ -9,7 +9,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.base.config.js');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-
+const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 
 module.exports = merge(webpackBaseConfig, {
     devtool: 'eval-source-map',
@@ -34,6 +34,7 @@ module.exports = merge(webpackBaseConfig, {
         }
     },
     plugins: [
+        new NamedModulesPlugin(),
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendor.bundle.js' }),
         new HtmlWebpackPlugin({
             inject: true,
