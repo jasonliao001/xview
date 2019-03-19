@@ -981,7 +981,7 @@
                 deep: true
             },
             columns: {
-                handler() {
+                handlerhandler() {
                     // todo 这里有性能问题，可能是左右固定计算属性影响的
                     const colsWithId = this.makeColumnsId(this.columns);
                     this.allColumns = getAllColumns(colsWithId);

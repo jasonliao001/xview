@@ -4,7 +4,31 @@
 
         <Button @click="handleClearCurrentRow">Clear</Button>
 
-        <tableV2></tableV2>
+        <tableV2
+            border
+            :columns="[{
+                        title: 'Name',
+                        key: 'name',
+                         align: 'center',
+                      
+                    },
+                    {
+                        title: 'Age',
+                        key: 'age',
+                        align: 'center',
+              
+                    },
+                    {
+                        title: 'Address',
+                        key: 'address',
+             
+                    },
+                    {
+                        title: 'Title',
+                        key: 'date',
+                        
+                    }]"
+        ></tableV2>
     </div>
 </template>
 <script>
@@ -28,7 +52,9 @@
                     },
                     {
                         title: 'Age',
-                        key: 'age'
+                        key: 'age',
+                        border: true,
+                        align: 'center'
                     },
                     {
                         title: 'Address',
