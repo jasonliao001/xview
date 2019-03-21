@@ -12,7 +12,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 
 module.exports = merge(webpackBaseConfig, {
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
 
     // 入口
     entry: {

@@ -52,6 +52,7 @@
                     </tbody>
                 </table>
             </div>
+
             <div :class="[prefixCls + '-fixed']" :style="fixedTableStyle" v-if="isLeftFixed">
                 <div :class="fixedHeaderClasses" v-if="showHeader">
                     <table-head
@@ -613,10 +614,8 @@
                     let bodyEl = bodyContentEl.parentElement;
                     let bodyContentHeight = bodyContentEl.offsetHeight;
                     let bodyHeight = bodyEl.offsetHeight;
-
                     this.showHorizontalScrollBar = bodyEl.offsetWidth < bodyContentEl.offsetWidth + (this.showVerticalScrollBar ? this.scrollBarWidth : 0);
                     this.showVerticalScrollBar = this.bodyHeight ? bodyHeight - (this.showHorizontalScrollBar ? this.scrollBarWidth : 0) < bodyContentHeight : false;
-
                     if (this.showVerticalScrollBar) {
                         bodyEl.classList.add(this.prefixCls + '-overflowY');
                     } else {
@@ -981,7 +980,7 @@
                 deep: true
             },
             columns: {
-                handlerhandler() {
+                handler() {
                     // todo 这里有性能问题，可能是左右固定计算属性影响的
                     const colsWithId = this.makeColumnsId(this.columns);
                     this.allColumns = getAllColumns(colsWithId);

@@ -1,31 +1,43 @@
 <template>
     <div :class="wrapClasses" :style="styles">
         <div :class="classes">
-            <!-- 表头 -->
-            <div :class="[prefixCls + '-header']" ref="header" :style="headerStyle" @mousewheel="handleMouseWheel">
+            <!-- head -->
+            <div :class="[prefixCls + '-header']" ref="header" @mousewheel="handleMouseWheel" v-if="showHeader">
                 <table cellspacing="0" cellpadding="0" border="0" :style="theadStyle">
                     <colgroup>
                         <col v-for="(column, index) in cloneColumns" :width="setCellWidth(column)">
                     </colgroup>
                     <thead>
                         <tr v-for="(cols, rowIndex) in headRows">
-                            <th v-for="(column, index) in cols" :class="alignCls(column)">
+                            <th
+                                v-for="(column, index) in cols"
+                                :colspan="column.colSpan"
+                                :rowspan="column.rowSpan"
+                                :class="alignCls(column)"
+                            >
                                 <div :class="cellClasses(column)">
-                                    <span>{{column.title}}</span>
+                                    <span>{{column.title || "#"}}</span>
                                 </div>
                             </th>
+                            <th v-if="showVerticalScrollBar && rowIndex===0" :class="scrollBarCellClass()" :rowspan="headRows.length"></th>
                         </tr>
                     </thead>
                 </table>
             </div>
             <!-- body -->
-            <div :class="[prefixCls +'-body']" ref="body" :style="bodyStyle">
-                <table cellspacing="0" cellpadding="0" border="0">
+            <div
+                :class="[prefixCls +'-body']"
+                ref="body"
+                :style="bodyStyle"
+                @scroll="handleBodyScroll"
+                v-show="!(!data || data.length === 0)"
+            >
+                <table cellspacing="0" cellpadding="0" border="0" ref="tbody" :style="tbodyStyle">
                     <colgroup>
                         <col v-for="(column, index) in cloneColumns" :width="setCellWidth(column)">
                     </colgroup>
-                    <tbody :class="[prefixCls + '-tbody']" :style="tbodyStyle">
-                        <template v-for="(row, index) in objData">
+                    <tbody :class="[prefixCls + '-tbody']">
+                        <template v-for="(row, index) in cloneData">
                             <tr
                                 :class="rowClasses(row._index)"
                                 @mouseenter.stop="handleMouseIn(row._index)"
@@ -33,7 +45,15 @@
                             >
                                 <td v-for="column in columns" :class="alignCls(column, row)">
                                     <div ref="cell" :class="cellClass">
-                                        <span>{{row[column.key]}}</span>
+                                        <template v-if="column.render">
+                                            <table-expand :row="row" :column="column" :index="index" :render="column.render"></table-expand>
+                                        </template>
+                                        <template v-else-if="column.type === 'index'">
+                                            <span>{{ index + 1 }}</span>
+                                        </template>
+                                        <template v-else>
+                                            <span class="t-table-cell-tooltip-content">{{row[column.key]}}</span>
+                                        </template>
                                     </div>
                                 </td>
                             </tr>
@@ -48,22 +68,44 @@
                         <tr>
                             <td :style="{'height':bodyStyle.height,'width':`${this.headerWidth}px`}">
                                 <span v-html="localeNoDataText" v-if="!data || data.length === 0"></span>
-                                <span v-html="localeNoFilteredDataText" v-else></span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <!-- isLeftFixed -->
-            <div :class="[prefixCls + '-fixed']" :style="fixedTableStyle" v-if="isLeftFixed"></div>
-            <!-- isRightFixed -->
-            <div :class="[prefixCls + '-fixed-right']" :style="fixedRightTableStyle" v-if="isRightFixed"></div>
         </div>
-        <!-- todo add loading -->
     </div>
 </template>
 <script>
+    /**
+     *
+     *
+     *
+     */
+    import TableExpand from './expand';
     import elementResizeDetectorMaker from 'element-resize-detector';
+    const SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+    const MOZ_HACK_REGEXP = /^moz([A-Z])/;
+    function camelCase(name) {
+        return name
+            .replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
+                return offset ? letter.toUpperCase() : letter;
+            })
+            .replace(MOZ_HACK_REGEXP, 'Moz$1');
+    }
+    const getStyle = function(element, styleName) {
+        if (!element || !styleName) return null;
+        styleName = camelCase(styleName);
+        if (styleName === 'float') {
+            styleName = 'cssFloat';
+        }
+        try {
+            const computed = document.defaultView.getComputedStyle(element, '');
+            return element.style[styleName] || computed ? computed[styleName] : null;
+        } catch (e) {
+            return element.style[styleName];
+        }
+    };
     let cached;
     const getScrollBarSize = function(fresh) {
         // if (isServer) return 0;
@@ -102,6 +144,7 @@
         }
         return cached;
     };
+
     function typeOf(obj) {
         const toString = Object.prototype.toString;
         const map = {
@@ -152,7 +195,7 @@
         }
         return str;
     };
-    // for 表头是多个
+    // 多个表头
     const getAllColumns = function(cols, forTableHead = false) {
         const columns = deepCopy(cols);
         const result = [];
@@ -178,10 +221,10 @@
         });
         return list.concat(other);
     };
-
+    // 多级表头
     const convertToRows = function(columns, fixedType = false) {
         const originColumns = fixedType ? (fixedType === 'left' ? deepCopy(convertColumnOrder(columns, 'left')) : deepCopy(convertColumnOrder(columns, 'right'))) : deepCopy(columns);
-        let maxLevel = 1;
+        let maxLevel = 1; //最高等级
         const traverse = (column, parent) => {
             if (parent) {
                 column.level = parent.level + 1;
@@ -225,7 +268,7 @@
         return rows;
     };
 
-    const prefixCls = 'ivu-table';
+    const prefixCls = 't-table';
     let rowKey = 1;
     let columnKey = 1;
     export default {
@@ -233,51 +276,13 @@
             columns: {
                 type: Array,
                 default() {
-                    return [
-                        {
-                            title: 'Name',
-                            key: 'name'
-                        },
-                        {
-                            title: 'Age',
-                            key: 'age'
-                        },
-                        {
-                            title: 'Address',
-                            key: 'address'
-                        }
-                    ];
+                    return [];
                 }
             },
             data: {
                 type: Array,
                 default() {
-                    return [
-                        {
-                            name: 'John Brown',
-                            age: 18,
-                            address: 'New York No. 1 Lake Park',
-                            date: '2016-10-03'
-                        },
-                        {
-                            name: 'Jim Green',
-                            age: 24,
-                            address: 'London No. 1 Lake Park',
-                            date: '2016-10-01'
-                        },
-                        {
-                            name: 'Joe Black',
-                            age: 30,
-                            address: 'Sydney No. 1 Lake Park',
-                            date: '2016-10-02'
-                        },
-                        {
-                            name: 'Jon Snow',
-                            age: 26,
-                            address: 'Ottawa No. 2 Lake Park',
-                            date: '2016-10-04'
-                        }
-                    ];
+                    return [];
                 }
             },
             fixed: {
@@ -329,15 +334,15 @@
                 default: false
             }
         },
+        components: { TableExpand },
         data() {
-            const colsWithId = this.makeColumnsId(this.columns);
+            const colsWithId = this.makeColumnsWidthId(this.columns);
             return {
                 prefixCls: prefixCls,
                 tableWidth: 0,
-                isLeftFixed: false,
-                isRightFixed: false,
-                headerWidth: '30',
+                headerWidth: 0,
                 cloneColumns: this.makeColumns(colsWithId),
+                cloneData: this.makeData(),
                 columnsWidth: {},
                 showVerticalScrollBar: false,
                 objData: this.makeObjData(), // checkbox or highlight-row
@@ -345,11 +350,10 @@
                 columnRows: this.makeColumnRows(false, colsWithId),
                 leftFixedColumnRows: this.makeColumnRows('left', colsWithId),
                 rightFixedColumnRows: this.makeColumnRows('right', colsWithId),
-                ready: false
-                // rebuildData: []
+                ready: false,
+                bodyHeight: 0
             };
         },
-
         computed: {
             wrapClasses() {
                 return [
@@ -420,20 +424,21 @@
                 }
                 return style;
             },
-            fixedTableStyle() {},
-            fixedRightTableStyle() {},
+            // fixedTableStyle() {},
+            // fixedRightTableStyle() {},
             localeNoDataText() {
-                return '无数据';
+                return '暂无数据';
             },
-            localeNoFilteredDataText() {
-                return '无过滤数据';
-            },
+            // localeNoFilteredDataText() {
+            //     return '无过滤数据';
+            // },
             headRows() {
+                // 多头判断
                 const isGroup = this.columnRows.length > 1;
                 if (isGroup) {
                     return this.fixed ? this.fixedColumnRows : this.columnRows;
                 } else {
-                    return [this.columns];
+                    return [this.cloneColumns];
                 }
             },
             cellClass() {
@@ -441,64 +446,51 @@
                     `${this.prefixCls}-cell`,
                     {
                         // [`${this.prefixCls}-hidden`]: !this.fixed && this.column.fixed && (this.column.fixed === 'left' || this.column.fixed === 'right'),
-                        // [`${this.prefixCls}-cell-ellipsis`]: this.column.ellipsis || false,
+                        // [`${this.prefixCls}-cell-ellipsis`]: this.column.ellipsis || false
                         // [`${this.prefixCls}-cell-with-expand`]: this.renderType === 'expand',
                         // [`${this.prefixCls}-cell-with-selection`]: this.renderType === 'selection'
                     }
                 ];
+            },
+            isLeftFixed() {
+                return this.columns.some(col => col.fixed && col.fixed === 'left');
+            },
+            isRightFixed() {
+                return this.columns.some(col => col.fixed && col.fixed === 'right');
             }
         },
         methods: {
-            handleBodyScroll() {},
-            handleMouseWheel() {},
-            // 修改列，设置一个隐藏的 id，便于后面的多级表头寻找对应的列，否则找不到
-            makeColumnsId(columns) {
-                return columns.map(item => {
-                    if ('children' in item) this.makeColumnsId(item.children);
-                    item.__id = getRandomStr(6);
-                    return item;
-                });
+            scrollBarCellClass() {
+                let hasRightFixed = false;
+                for (let i in this.headRows) {
+                    for (let j in this.headRows[i]) {
+                        if (this.headRows[i][j].fixed === 'right') {
+                            hasRightFixed = true;
+                            break;
+                        }
+                        if (hasRightFixed) break;
+                    }
+                }
+                return [
+                    {
+                        [`${this.prefixCls}-hidden`]: hasRightFixed
+                    }
+                ];
             },
-            makeColumns(cols) {
-                let columns = deepCopy(getAllColumns(cols));
-                let left = [];
-                let right = [];
-                let center = [];
-                columns.forEach((column, index) => {
-                    column._index = index;
-                    column._columnKey = columnKey++;
-                    column.width = parseInt(column.width);
-                    column._width = column.width ? column.width : ''; // update in handleResize()
-                    column._sortType = 'normal';
-                    column._filterVisible = false;
-                    column._isFiltered = false;
-                    column._filterChecked = [];
-                    // 过滤的处理
-                    if ('filterMultiple' in column) {
-                        column._filterMultiple = column.filterMultiple;
-                    } else {
-                        column._filterMultiple = true;
-                    }
-                    if ('filteredValue' in column) {
-                        column._filterChecked = column.filteredValue;
-                        column._isFiltered = true;
-                    }
-                    //
-                    if ('sortType' in column) {
-                        column._sortType = column.sortType;
-                    }
-
-                    // 如果左右有固定内容的时候处理
-                    if (column.fixed && column.fixed === 'left') {
-                        left.push(column);
-                    } else if (column.fixed && column.fixed === 'right') {
-                        right.push(column);
-                    } else {
-                        center.push(column);
-                    }
-                });
-
-                return left.concat(center).concat(right);
+            handleBodyScroll() {
+                if (this.showHeader) this.$refs.header.scrollLeft = event.target.scrollLeft;
+                // if (this.isLeftFixed) this.$refs.fixedBody.scrollTop = event.target.scrollTop;
+                // if (this.isRightFixed) this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
+                // this.hideColumnFilter();
+            },
+            handleMouseWheel(event) {
+                const deltaX = event.deltaX;
+                const $body = this.$refs.body;
+                if (deltaX > 0) {
+                    $body.scrollLeft = $body.scrollLeft + 10;
+                } else {
+                    $body.scrollLeft = $body.scrollLeft - 10;
+                }
             },
             // 设置宽度
             setCellWidth(column) {
@@ -578,14 +570,11 @@
                             }
                         }
                     }
-
                     column._width = width;
-
                     columnsWidth[column._index] = {
                         width: width
                     };
                 }
-                // console.log('methods --- handle', column._width);
                 if (usableWidth > 0) {
                     usableLength = noMaxWidthColumns.length;
                     columnWidth = parseInt(usableWidth / usableLength);
@@ -610,12 +599,51 @@
 
                 this.tableWidth = this.cloneColumns.map(cell => cell._width).reduce((a, b) => a + b, 0) + (this.showVerticalScrollBar ? this.scrollBarWidth : 0) + 1;
                 this.columnsWidth = columnsWidth;
-                // this.fixedHeader();
+                this.fixedHeader();
             },
-            // create a multiple table-head
-            makeColumnRows(fixedType, cols) {
-                return convertToRows(cols, fixedType);
+            fixedHeader() {
+                if (this.height) {
+                    this.$nextTick(() => {
+                        const titleHeight = parseInt(getStyle(this.$refs.title, 'height')) || 0;
+                        const headerHeight = parseInt(getStyle(this.$refs.header, 'height')) || 0;
+                        const footerHeight = parseInt(getStyle(this.$refs.footer, 'height')) || 0;
+                        this.bodyHeight = this.height - titleHeight - headerHeight - footerHeight;
+                        this.$nextTick(() => this.fixedBody());
+                    });
+                } else {
+                    this.bodyHeight = 0;
+                    this.$nextTick(() => this.fixedBody());
+                }
             },
+            fixedBody() {
+                if (this.$refs.header) {
+                    this.headerWidth = this.$refs.header.children[0].offsetWidth;
+                    this.headerHeight = this.$refs.header.children[0].offsetHeight;
+                }
+
+                if (!this.$refs.tbody || !this.data || this.data.length === 0) {
+                    this.showVerticalScrollBar = false;
+                } else {
+                    let bodyContentEl = this.$refs.tbody;
+                    let bodyEl = bodyContentEl.parentElement;
+                    let bodyContentHeight = bodyContentEl.offsetHeight;
+                    let bodyHeight = bodyEl.offsetHeight;
+                    this.showHorizontalScrollBar = bodyEl.offsetWidth < bodyContentEl.offsetWidth + (this.showVerticalScrollBar ? this.scrollBarWidth : 0);
+
+                    this.showVerticalScrollBar = this.bodyHeight ? bodyHeight - (this.showHorizontalScrollBar ? this.scrollBarWidth : 0) < bodyContentHeight : false;
+                    if (this.showVerticalScrollBar) {
+                        bodyEl.classList.add(this.prefixCls + '-overflowY');
+                    } else {
+                        bodyEl.classList.remove(this.prefixCls + '-overflowY');
+                    }
+                    if (this.showHorizontalScrollBar) {
+                        bodyEl.classList.add(this.prefixCls + '-overflowX');
+                    } else {
+                        bodyEl.classList.remove(this.prefixCls + '-overflowX');
+                    }
+                }
+            },
+            //row,cellClasses
             cellClasses(column) {
                 return [
                     `${this.prefixCls}-cell`,
@@ -628,25 +656,28 @@
             rowClasses(_index) {
                 return [
                     `${this.prefixCls}-row`,
+                    this.rowClassName(this.objData[_index], _index),
                     {
-                        //  [`${this.prefixCls}-row-highlight`]: this.objData[_index] && this.objData[_index]._isHighlight,
+                        [`${this.prefixCls}-row-highlight`]: this.objData[_index] && this.objData[_index]._isHighlight,
                         [`${this.prefixCls}-row-hover`]: this.objData[_index] && this.objData[_index]._isHover
                     }
                 ];
             },
+            // 处理hover
             handleMouseIn(_index) {
-                // if (this.disabledHover) return;
+                if (this.disabledHover) return;
                 if (this.objData[_index]._isHover) return;
                 this.objData[_index]._isHover = true;
             },
             handleMouseOut(_index) {
-                // if (this.disabledHover) return;
+                if (this.disabledHover) return;
                 this.objData[_index]._isHover = false;
             },
+            // set status for rowsData
             makeObjData() {
                 let data = {};
                 this.data.forEach((row, index) => {
-                    const newRow = deepCopy(row); // todo 直接替换
+                    const newRow = deepCopy(row); //todo 直接替换
                     newRow._isHover = false;
                     newRow._index = index;
                     if (newRow._disabled) {
@@ -673,6 +704,66 @@
                 });
                 return data;
             },
+            // 处理数据
+            makeData() {
+                let data = deepCopy(this.data);
+                data.forEach((row, index) => {
+                    row._index = index;
+                    row._rowKey = rowKey++;
+                });
+                return data;
+            },
+            makeColumns(cols) {
+                let columns = deepCopy(getAllColumns(cols));
+                let left = [];
+                let right = [];
+                let center = [];
+                columns.forEach((column, index) => {
+                    column._index = index;
+                    column._columnKey = columnKey++;
+                    column.width = parseInt(column.width);
+                    column._width = column.width ? column.width : ''; // update in handleResize()
+                    column._sortType = 'normal';
+                    column._filterVisible = false;
+                    column._isFiltered = false;
+                    column._filterChecked = [];
+                    // 过滤的处理
+                    if ('filterMultiple' in column) {
+                        column._filterMultiple = column.filterMultiple;
+                    } else {
+                        column._filterMultiple = true;
+                    }
+                    if ('filteredValue' in column) {
+                        column._filterChecked = column.filteredValue;
+                        column._isFiltered = true;
+                    }
+                    if ('sortType' in column) {
+                        column._sortType = column.sortType;
+                    }
+                    // 如果左右有固定内容的时候处理
+                    if (column.fixed && column.fixed === 'left') {
+                        left.push(column);
+                    } else if (column.fixed && column.fixed === 'right') {
+                        right.push(column);
+                    } else {
+                        center.push(column);
+                    }
+                });
+                // 排列顺序
+                return left.concat(center).concat(right);
+            },
+            // 修改列，设置一个隐藏的 id，便于后面的多级表头寻找对应的列，否则找不到
+            makeColumnsWidthId(columns) {
+                return columns.map(item => {
+                    if ('children' in item) this.makeColumnsWidthId(item.children);
+                    item.__id = getRandomStr(6);
+                    return item;
+                });
+            },
+            // create a multiple table-head
+            makeColumnRows(fixedType, cols) {
+                return convertToRows(cols, fixedType);
+            },
             alignCls(column, row = {}) {
                 let cellClassName = '';
                 if (row.cellClassName && column.key && row.cellClassName[column.key]) {
@@ -695,18 +786,30 @@
             this.observer = elementResizeDetectorMaker();
             this.observer.listenTo(this.$el, this.handleResize);
         },
+        beforeDestroy() {
+            this.observer.removeListener(this.$el, this.handleResize);
+        },
+
         watch: {
-            columns: {
-                handler() {
-                    console.log('watch --- columns');
-                },
+            data: {
+                handler() {},
                 deep: true
+            },
+            columns: {
+                handler() {},
+                deep: true
+            },
+            showHorizontalScrollBar() {
+                this.handleResize();
+            },
+            showVerticalScrollBar() {
+                this.handleResize();
             }
         }
     };
 </script>
 <style lang="less" scoped>
-@css-prefix : ivu-;
+@css-prefix : t-;
 @border-color-base : #dcdee2; // outside
 @text-color : #515a6e;
 @font-size-small : 12px;
@@ -827,7 +930,6 @@
         text-align: left;
         text-overflow: ellipsis;
         vertical-align: middle;
-        //position: relative;
         border-bottom: 1px solid @border-color-split;
     }
 
@@ -925,7 +1027,7 @@
     }
     th &-cell {
         display: inline-block;
-        //position: relative;
+
         word-wrap: normal;
         vertical-align: middle;
     }
@@ -956,45 +1058,45 @@
         }
     }
 
-    &-large {
-        font-size: @font-size-base;
-        th {
-            height: 48px;
-        }
-        td {
-            height: 60px;
-        }
-        &-title,
-        &-footer {
-            height: 60px;
-            line-height: 60px;
-        }
-        .@{table-prefix-cls}-cell-with-expand {
-            height: 59px;
-            line-height: 59px;
-            i {
-                font-size: @font-size-base+2;
-            }
-        }
-    }
+    // &-large {
+    //     font-size: @font-size-base;
+    //     th {
+    //         height: 48px;
+    //     }
+    //     td {
+    //         height: 60px;
+    //     }
+    //     &-title,
+    //     &-footer {
+    //         height: 60px;
+    //         line-height: 60px;
+    //     }
+    //     .@{table-prefix-cls}-cell-with-expand {
+    //         height: 59px;
+    //         line-height: 59px;
+    //         i {
+    //             font-size: @font-size-base+2;
+    //         }
+    //     }
+    // }
 
-    &-small {
-        th {
-            height: 32px;
-        }
-        td {
-            height: 40px;
-        }
-        &-title,
-        &-footer {
-            height: 40px;
-            line-height: 40px;
-        }
-        .@{table-prefix-cls}-cell-with-expand {
-            height: 39px;
-            line-height: 39px;
-        }
-    }
+    // &-small {
+    //     th {
+    //         height: 32px;
+    //     }
+    //     td {
+    //         height: 40px;
+    //     }
+    //     &-title,
+    //     &-footer {
+    //         height: 40px;
+    //         line-height: 40px;
+    //     }
+    //     .@{table-prefix-cls}-cell-with-expand {
+    //         height: 39px;
+    //         line-height: 39px;
+    //     }
+    // }
 
     &-row-highlight,
     tr&-row-highlight&-row-hover,
@@ -1005,53 +1107,53 @@
         }
     }
 
-    &-fixed,
-    &-fixed-right {
-        position: absolute;
-        top: 0;
-        left: 0;
-        box-shadow: 2px 0 6px -2px rgba(0, 0, 0, 0.2);
+    // &-fixed,
+    // &-fixed-right {
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     box-shadow: 2px 0 6px -2px rgba(0, 0, 0, 0.2);
 
-        &::before {
-            content: '';
-            width: 100%;
-            height: 1px;
-            background-color: @border-color-base;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            z-index: 4;
-        }
-    }
-    &-fixed-right {
-        top: 0;
-        left: auto;
-        right: 0;
-        box-shadow: -2px 0 6px -2px rgba(0, 0, 0, 0.2);
-    }
-    &-fixed-right-header {
-        position: absolute;
-        top: -1px;
-        right: 0;
-        background-color: @table-thead-bg;
-        border-top: 1px solid @border-color-base;
-        border-bottom: 1px solid @border-color-split;
-    }
-    &-fixed-header {
-        overflow: hidden;
-        // 在 #1387 里，添加了下面的代码，但是在 #5174 会出现新的问题。
-        // 但是，在新版本里，注释掉后，#1387 的问题并没有再复现，所以注释掉
-        //&-with-empty{
-        //    .@{table-prefix-cls}-hidden{
-        //        .@{table-prefix-cls}-sort{
-        //            display: none;
-        //        }
-        //        .@{table-prefix-cls}-cell span{
-        //            display: none;
-        //        }
-        //    }
-        //}
-    }
+    //     &::before {
+    //         content: '';
+    //         width: 100%;
+    //         height: 1px;
+    //         background-color: @border-color-base;
+    //         position: absolute;
+    //         left: 0;
+    //         bottom: 0;
+    //         z-index: 4;
+    //     }
+    // }
+    // &-fixed-right {
+    //     top: 0;
+    //     left: auto;
+    //     right: 0;
+    //     box-shadow: -2px 0 6px -2px rgba(0, 0, 0, 0.2);
+    // }
+    // &-fixed-right-header {
+    //     position: absolute;
+    //     top: -1px;
+    //     right: 0;
+    //     background-color: @table-thead-bg;
+    //     border-top: 1px solid @border-color-base;
+    //     border-bottom: 1px solid @border-color-split;
+    // }
+    // &-fixed-header {
+    //     overflow: hidden;
+    //     // 在 #1387 里，添加了下面的代码，但是在 #5174 会出现新的问题。
+    //     // 但是，在新版本里，注释掉后，#1387 的问题并没有再复现，所以注释掉
+    //     //&-with-empty{
+    //     //    .@{table-prefix-cls}-hidden{
+    //     //        .@{table-prefix-cls}-sort{
+    //     //            display: none;
+    //     //        }
+    //     //        .@{table-prefix-cls}-cell span{
+    //     //            display: none;
+    //     //        }
+    //     //    }
+    //     //}
+    // }
     &-fixed-body {
         overflow: hidden;
         position: relative;
@@ -1072,60 +1174,59 @@
     &-sort {
         // .sortable();
     }
-    &-filter {
-        display: inline-block;
-        cursor: pointer;
-        position: relative;
-        //top: 1px;
+    // &-filter {
+    //     display: inline-block;
+    //     cursor: pointer;
+    //     position: relative;
+    //     //top: 1px;
 
-        i {
-            // color: @btn-disable-color;
-            // transition: color @transition-time @ease-in-out;
-            // &:hover {
-            //     color: inherit;
-            // }
-            // &.on {
-            //     color: @primary-color;
-            // }
-        }
-        &-list {
-            padding: 8px 0 0;
-            &-item {
-                padding: 0 12px 8px;
+    //     i {
+    //         // color: @btn-disable-color;
+    //         // transition: color @transition-time @ease-in-out;
+    //         // &:hover {
+    //         //     color: inherit;
+    //         // }
+    //         // &.on {
+    //         //     color: @primary-color;
+    //         // }
+    //     }
+    //     &-list {
+    //         padding: 8px 0 0;
+    //         &-item {
+    //             padding: 0 12px 8px;
 
-                .ivu-checkbox-wrapper + .ivu-checkbox-wrapper {
-                    margin: 0;
-                }
-                label {
-                    display: block;
+    //             .ivu-checkbox-wrapper + .ivu-checkbox-wrapper {
+    //                 margin: 0;
+    //             }
+    //             label {
+    //                 display: block;
 
-                    & > span {
-                        margin-right: 4px;
-                    }
-                }
-            }
-            ul {
-                padding-bottom: 8px;
-            }
-            // .select-item(@table-prefix-cls, @table-select-item-prefix-cls);
-        }
-        &-footer {
-            padding: 4px;
-            border-top: 1px solid @border-color-split;
-            overflow: hidden;
-            button:first-child {
-                float: left;
-            }
-            button:last-child {
-                float: right;
-            }
-        }
-    }
+    //                 & > span {
+    //                     margin-right: 4px;
+    //                 }
+    //             }
+    //         }
+    //         ul {
+    //             padding-bottom: 8px;
+    //         }
+    //         // .select-item(@table-prefix-cls, @table-select-item-prefix-cls);
+    //     }
+    //     &-footer {
+    //         padding: 4px;
+    //         border-top: 1px solid @border-color-split;
+    //         overflow: hidden;
+    //         button:first-child {
+    //             float: left;
+    //         }
+    //         button:last-child {
+    //             float: right;
+    //         }
+    //     }
+    // }
 
     &-tip {
         table {
             width: 100%;
-
             td {
                 text-align: center;
             }

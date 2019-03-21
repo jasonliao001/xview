@@ -1,32 +1,71 @@
 <template>
     <div>
         <Table ref="currentRowTable" stripe :columns="columns3" :data="data1"></Table>
-
         <Button @click="handleClearCurrentRow">Clear</Button>
-
         <tableV2
             border
+            align="center"
+            :data="data1"
+            :row-class-name="rowClassName"
             :columns="[{
-                        title: 'Name',
-                        key: 'name',
-                         align: 'center',
-                      
+                        title: '',
+                        type:'index',
+                        width:'60'
                     },
                     {
                         title: 'Age',
                         key: 'age',
-                        align: 'center',
-              
                     },
                     {
                         title: 'Address',
                         key: 'address',
-             
                     },
                     {
-                        title: 'Title',
+                        title: '操作',
                         key: 'date',
-                        
+                        render:(h, params) => {
+                            return h(
+                                'div',[
+                                    h('span', {
+                                        domProps: {
+                                            innerHTML: '确认'
+                                        },
+                                        style:{
+                                            border: '1px solid #ddd',
+                                            padding: '2px 20px',
+                                            cursor: 'pointer',
+                                            borderRadius:'8px',
+                                            fontSize:'12px',
+                                            display: 'inline-block',
+                                            marginRight:'10px' 
+                                        },
+                                        on:{
+                                            click: () => {
+                                                    this.show(params.index)
+                                            }
+                                        }
+                                }),
+                                 h('span', {
+                                        domProps: {
+                                            innerHTML: '取消'
+                                        },
+                                        style:{
+                                            border: '1px solid #ddd',
+                                            padding: '2px 20px',
+                                            cursor: 'pointer',
+                                            borderRadius:'8px',
+                                            fontSize:'12px',
+                                            display: 'inline-block'
+                                        },
+                                        on:{
+                                            click: () => {
+                                                    this.show(params.row)
+                                            }
+                                        }
+                                })
+                                ]
+                            )
+                        }
                     }]"
         ></tableV2>
     </div>
@@ -37,23 +76,22 @@
             return {
                 columns3: [
                     {
-                        type: 'index',
-                        width: 60,
                         align: 'center',
-                        fixed: 'left',
-                        indexMethod(row) {
-                            return row._index;
-                        }
+                        key: 'date',
+                        align: 'center',
+                        title: 'date',
+                        fixed: 'left'
+                        // indexMethod(row) {
+                        //     return row._index;
+                        // }
                     },
                     {
                         title: 'Name',
-                        key: 'name',
-                        width: 100
+                        key: 'name'
                     },
                     {
                         title: 'Age',
                         key: 'age',
-                        border: true,
                         align: 'center'
                     },
                     {
@@ -66,8 +104,7 @@
                     {
                         name: 'John Brown',
                         age: 18,
-                        address:
-                            '自定义渲染列，使用 Vue 的 Render 函数。传入两个参数，第一个是 h，第二个为对象，包含 row、column 和 index，分别指当前行数据，当前列数据，当前行索引，详见示例。自定义渲染列，使用 Vue 的 Render 函数。传入两个参数，第一个是 h，第二个为对象，包含 row、column 和 index，分别指当前行数据，当前列数据，当前行索引，详见示例。自定义渲染列，使用 Vue 的 Render 函数。传入两个参数，第一个是 h，第二个为对象，包含 row、column 和 index，分别指当前行数据，当前列数据，当前行索引，详见示例。',
+                        address: '自定义渲染列，使用第一个是 ',
                         date: '2016-10-03'
                     },
                     {
@@ -94,6 +131,10 @@
         methods: {
             handleClearCurrentRow() {
                 this.$refs.currentRowTable.clearCurrentRow();
+            },
+            rowClassName(row, index) {},
+            show(index) {
+                console.log('show------', index);
             }
         }
     };
