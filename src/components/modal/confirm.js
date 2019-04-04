@@ -219,7 +219,6 @@ Modal.newInstance = properties => {
             onRemove() {}
         }
     });
-
     const component = Instance.$mount();
     document.body.appendChild(component.$el);
     const modal = Instance.$children[0];
@@ -301,5 +300,4 @@ Modal.newInstance = properties => {
         component: modal
     };
 };
-
 export default Modal;

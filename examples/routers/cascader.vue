@@ -1,13 +1,13 @@
 <template>
     <div>
-        <Row>
-            <i-col span="18">
+        <!-- <Row> -->
+        <!-- <i-col span="18">
                 <i-button v-on:click="setValue">setValue</i-button>
             </i-col>
-            <i-col span="4">
-                <Cascader :data="data" v-model="value1" transfer></Cascader>
-            </i-col>
-        </Row>
+        <i-col span="4">-->
+        <Cascader :data="data" v-model="value1" transfer></Cascader>
+        <!-- </i-col>
+        </Row>-->
     </div>
 </template>
 <script>

@@ -105,6 +105,7 @@
                 this.stateTree.forEach(rootNode => {
                     flattenChildren(rootNode);
                 });
+
                 return flatTree;
             },
             // 向上更新树

@@ -1,5 +1,6 @@
 <template>
-    <div v-transfer-dom :data-transfer="transfer">
+    <!-- v-transfer-dom :data-transfer="transfer" -->
+    <div>
         <transition :name="transitionNames[1]">
             <div :class="maskClasses" :style="wrapStyles" v-show="visible" v-if="showMask" @click="handleMask"></div>
         </transition>
@@ -8,9 +9,7 @@
                 <div :class="classes" :style="mainStyles" v-show="visible">
                     <div :class="contentClasses" ref="content" :style="contentStyles" @click="handleClickModal">
                         <a :class="[prefixCls + '-close']" v-if="closable" @click="close">
-                            <slot name="close">
-                                <Icon type="ios-close"></Icon>
-                            </slot>
+                            <slot name="close">X</slot>
                         </a>
                         <div :class="[prefixCls + '-header']" @mousedown="handleMoveStart" v-if="showHead">
                             <slot name="header">
@@ -22,8 +21,10 @@
                         </div>
                         <div :class="[prefixCls + '-footer']" v-if="!footerHide">
                             <slot name="footer">
-                                <i-button type="text" size="large" @click.native="cancel">{{ localeCancelText }}</i-button>
-                                <i-button type="primary" size="large" :loading="buttonLoading" @click.native="ok">{{ localeOkText }}</i-button>
+                                <button @click="cancel">{{localeCancelText}}</button>
+                                <button @click="ok">{{localeOkText}}</button>
+                                <!-- <i-button type="text" size="large" @click.native="cancel">{{ localeCancelText }}</i-button>
+                                <i-button type="primary" size="large" :loading="buttonLoading" @click.native="ok">{{ localeOkText }}</i-button>-->
                             </slot>
                         </div>
                     </div>
@@ -33,25 +34,15 @@
     </div>
 </template>
 <script>
-    // 此组件能够认识到另外一中编写组件的方式
-    import Icon from '../icon';
-    import iButton from '../button/button.vue';
-    import TransferDom from '../../directives/transfer-dom';
-    import Locale from '../../mixins/locale';
     import Emitter from '../../mixins/emitter';
     import ScrollbarMixins from './mixins-scrollbar';
     import { on, off } from '../../utils/dom';
     import { findComponentsDownward } from '../../utils/assist';
-
     import { transferIndex as modalIndex, transferIncrease as modalIncrease } from '../../utils/transfer-queue';
-
-    const prefixCls = 'ivu-modal';
-
+    const prefixCls = 't-modal';
     export default {
         name: 'Modal',
-        mixins: [Locale, Emitter, ScrollbarMixins],
-        components: { Icon, iButton },
-        directives: { TransferDom },
+        mixins: [Emitter, ScrollbarMixins],
         props: {
             value: {
                 type: Boolean,
@@ -106,7 +97,7 @@
             transfer: {
                 type: Boolean,
                 default() {
-                    return !this.$IVIEW || this.$IVIEW.transfer === '' ? true : this.$IVIEW.transfer;
+                    return true;
                 }
             },
             fullscreen: {
@@ -218,18 +209,18 @@
                 return style;
             },
             localeOkText() {
-                if (this.okText === undefined) {
-                    return this.t('i.modal.okText');
-                } else {
-                    return this.okText;
-                }
+                // if (this.okText === undefined) {
+                //     return this.t('i.modal.okText');
+                // } else {
+                return this.okText;
+                // }
             },
             localeCancelText() {
-                if (this.cancelText === undefined) {
-                    return this.t('i.modal.cancelText');
-                } else {
-                    return this.cancelText;
-                }
+                // if (this.cancelText === undefined) {
+                //     return this.t('i.modal.cancelText');
+                // } else {
+                return this.cancelText;
+                // }
             },
             showMask() {
                 return this.draggable ? false : this.mask;
@@ -398,3 +389,6 @@
         }
     };
 </script>
+<style lang="less" scoped>
+</style>
+

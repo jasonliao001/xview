@@ -1,5 +1,5 @@
-@modal-prefix-cls: ~"@{css-prefix}modal";
-@confirm-prefix-cls: ~"@{css-prefix}modal-confirm";
+@modal-prefix-cls: ~'@{css-prefix}modal';
+@confirm-prefix-cls: ~'@{css-prefix}modal-confirm';
 
 .@{modal-prefix-cls} {
     width: auto;
@@ -39,18 +39,18 @@
         border: 0;
         border-radius: @border-radius-base;
         background-clip: padding-box;
-        box-shadow: 0 4px 12px rgba(0,0,0,.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-        &-no-mask{
+        &-no-mask {
             pointer-events: auto;
         }
-        &-drag{
+        &-drag {
             position: absolute;
-            .@{modal-prefix-cls}-header{
+            .@{modal-prefix-cls}-header {
                 cursor: move;
             }
         }
-        &-dragging{
+        &-dragging {
             -webkit-user-select: none;
             -moz-user-select: none;
             user-select: none;
@@ -82,7 +82,7 @@
         }
     }
 
-    &-fullscreen{
+    &-fullscreen {
         width: 100% !important;
         top: 0;
         bottom: 0;
@@ -91,7 +91,7 @@
         @modal-header-height: 51px;
         @modal-footer-height: 61px;
 
-        .@{modal-prefix-cls}-content{
+        .@{modal-prefix-cls}-content {
             width: 100%;
             border-radius: 0;
             position: absolute;
@@ -99,26 +99,26 @@
             bottom: 0;
         }
 
-        .@{modal-prefix-cls}-body{
+        .@{modal-prefix-cls}-body {
             width: 100%;
             overflow: auto;
             position: absolute;
             top: @modal-header-height;
             bottom: @modal-footer-height;
         }
-        &-no-header .@{modal-prefix-cls}-body{
+        &-no-header .@{modal-prefix-cls}-body {
             top: 0;
         }
-        &-no-footer .@{modal-prefix-cls}-body{
+        &-no-footer .@{modal-prefix-cls}-body {
             bottom: 0;
         }
-        .@{modal-prefix-cls}-footer{
+        .@{modal-prefix-cls}-footer {
             position: absolute;
             width: 100%;
             bottom: 0;
         }
     }
-    &-no-mask{
+    &-no-mask {
         pointer-events: none;
     }
 }
@@ -128,7 +128,7 @@
         width: auto !important;
         margin: 10px;
     }
-    .@{modal-prefix-cls}-fullscreen{
+    .@{modal-prefix-cls}-fullscreen {
         width: 100% !important;
         margin: 0;
     }
@@ -177,19 +177,19 @@
         }
     }
 
-    &-body{
+    &-body {
         padding-left: 42px;
         font-size: @font-size-base;
         color: @text-color;
         position: relative;
 
-        &-render{
+        &-render {
             margin: 0;
             padding: 0;
         }
     }
 
-    &-footer{
+    &-footer {
         margin-top: 20px;
         text-align: right;
 

@@ -3,7 +3,7 @@
 import Vue from 'vue';
 const isServer = Vue.prototype.$isServer;
 
-export default function (lang) {
+export default function(lang) {
     if (!isServer) {
         if (typeof window.iview !== 'undefined') {
             if (!('langs' in iview)) {
@@ -12,5 +12,5 @@ export default function (lang) {
             iview.langs[lang.i.locale] = lang;
         }
     }
-};
+}
 /*eslint-enable */

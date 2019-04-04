@@ -792,7 +792,11 @@
 
         watch: {
             data: {
-                handler() {},
+                handler() {
+                    setTimeout(() => {
+                        this.cloneData = deepCopy(this.data);
+                    }, 0);
+                },
                 deep: true
             },
             columns: {

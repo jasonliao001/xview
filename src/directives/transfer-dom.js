@@ -6,17 +6,19 @@
  * @param {(Node|string|Boolean)} [node=document.body] DOM Node, CSS selector, or Boolean
  * @return {Node} The target that the el will be appended to
  */
-function getTarget (node) {
+function getTarget(node) {
     if (node === void 0) {
-        node = document.body
+        node = document.body;
     }
-    if (node === true) { return document.body }
-    return node instanceof window.Node ? node : document.querySelector(node)
+    if (node === true) {
+        return document.body;
+    }
+    return node instanceof window.Node ? node : document.querySelector(node);
 }
 
 const directive = {
-    inserted (el, { value }, vnode) {
-        if ( el.dataset && el.dataset.transfer !== 'true') return false;
+    inserted(el, { value }, vnode) {
+        if (el.dataset && el.dataset.transfer !== 'true') return false;
         el.className = el.className ? el.className + ' v-transfer-dom' : 'v-transfer-dom';
         const parentNode = el.parentNode;
         if (!parentNode) return;
@@ -26,7 +28,7 @@ const directive = {
         if (value !== false) {
             parentNode.replaceChild(home, el); // moving out, el is no longer in the document
             getTarget(value).appendChild(el); // moving into new place
-            hasMovedOut = true
+            hasMovedOut = true;
         }
         if (!el.__transferDomData) {
             el.__transferDomData = {
@@ -34,11 +36,11 @@ const directive = {
                 home: home,
                 target: getTarget(value),
                 hasMovedOut: hasMovedOut
-            }
+            };
         }
     },
-    componentUpdated (el, { value }) {
-        if ( el.dataset && el.dataset.transfer !== 'true') return false;
+    componentUpdated(el, { value }) {
+        if (el.dataset && el.dataset.transfer !== 'true') return false;
         // need to make sure children are done updating (vs. `update`)
         const ref$1 = el.__transferDomData;
         if (!ref$1) return;
@@ -62,15 +64,15 @@ const directive = {
             getTarget(value).appendChild(el);
         }
     },
-    unbind (el) {
+    unbind(el) {
         if (el.dataset && el.dataset.transfer !== 'true') return false;
         el.className = el.className.replace('v-transfer-dom', '');
         const ref$1 = el.__transferDomData;
         if (!ref$1) return;
         if (el.__transferDomData.hasMovedOut === true) {
-            el.__transferDomData.parentNode && el.__transferDomData.parentNode.appendChild(el)
+            el.__transferDomData.parentNode && el.__transferDomData.parentNode.appendChild(el);
         }
-        el.__transferDomData = null
+        el.__transferDomData = null;
     }
 };
 

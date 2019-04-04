@@ -105,7 +105,6 @@
             dropStyles() {
                 let styles = {};
                 if (this.transfer) styles['z-index'] = 1060 + this.tIndex;
-
                 return styles;
             }
         },

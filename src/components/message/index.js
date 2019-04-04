@@ -29,7 +29,7 @@ function getMessageInstance() {
                 top: `${defaults.top}px`
             }
         });
-
+    console.log(messageInstance);
     return messageInstance;
 }
 

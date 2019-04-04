@@ -1,2 +1,6 @@
-import TreeV2 from './tree.vue';
-export default TreeV2;
+import Tree from './tree.vue';
+import './tree.less';
+Tree.install = function(Vue) {
+    Vue.component('Tree', Tree);
+};
+export default Tree;

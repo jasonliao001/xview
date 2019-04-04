@@ -5,7 +5,7 @@
         <tableV2
             border
             align="center"
-            :data="data1"
+            :data="data2"
             :row-class-name="rowClassName"
             :columns="[{
                         title: '',
@@ -68,6 +68,20 @@
                         }
                     }]"
         ></tableV2>
+
+        <form action="Handler1.ashx" method="post">
+            <p>
+                客户名称:
+                <input type="text" name="CustomerName" style="width: 300px">
+            </p>
+            <p>
+                客户电话:
+                <input type="text" name="CustomerTel" style="width: 300px">
+            </p>
+            <p>
+                <input type="submit" value="提交">
+            </p>
+        </form>
     </div>
 </template>
 <script>
@@ -125,12 +139,14 @@
                         address: 'Ottawa No. 2 Lake Park',
                         date: '2016-10-04'
                     }
-                ]
+                ],
+                data2: []
             };
         },
         methods: {
             handleClearCurrentRow() {
-                this.$refs.currentRowTable.clearCurrentRow();
+                this.data2 = this.data1;
+                // this.$refs.currentRowTable.clearCurrentRow();
             },
             rowClassName(row, index) {},
             show(index) {

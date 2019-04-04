@@ -2,6 +2,7 @@ import Affix from './components/affix';
 import locale from './locale/index';
 import Layout from './components/layout';
 import Content from './components/content';
+import Cascader from './components/cascader';
 import Button from './components/button';
 import Footer from './components/footer';
 import Header from './components/header';
@@ -31,8 +32,11 @@ import DatePicker from './components/date-picker';
 import Tree from './components/tree';
 import Table from './components/table';
 import Spin from './components/spin';
-import TreeV2 from './components/treeV2.vue';
+// import TreeV2 from './components/treeV2.vue';
 import tableV2 from './components/tableV2';
+import TooltipV2 from './components/tooltipV2';
+import MessageV2 from './components/messageV2';
+
 const components = {
     Affix,
     Layout: Layout,
@@ -74,10 +78,13 @@ const components = {
     DatePicker,
     TimePicker,
     Tree,
-    TreeV2,
+    // TreeV2,
     Table,
     Spin,
-    tableV2: tableV2
+    tableV2: tableV2,
+    MessageV2,
+    TooltipV2: TooltipV2,
+    Cascader
 };
 
 const iview = {
@@ -115,6 +122,7 @@ const install = function(Vue, opts = {}) {
 
     Vue.prototype.$Loading = LoadingBar;
     Vue.prototype.$Message = Message;
+    Vue.prototype.$MessageV2 = MessageV2;
     Vue.prototype.$Modal = Modal;
     Vue.prototype.$Notice = Notice;
     // Vue.prototype.$Spin = Spin;

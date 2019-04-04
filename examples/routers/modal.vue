@@ -1,7 +1,7 @@
 <template>
     <div>
         <Button type="primary" @click="modal1 = true">Display dialog box</Button>
-        <Modal v-model="modal1" title="Common Modal dialog box title" @on-ok="ok" @on-cancel="cancel">
+        <Modal v-model="modal1" @on-hidden="hidden" title="Common Modal dialog box title" @on-ok="ok" @on-cancel="cancel">
             <p>Content of dialog</p>
             <p>Content of dialog</p>
             <p>Content of dialog</p>
@@ -13,7 +13,8 @@
                 <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Dropdown transfer>
-                <a href="javascript:void(0)">下拉菜单
+                <a href="javascript:void(0)">
+                    下拉菜单
                     <Icon type="ios-arrow-down"></Icon>
                 </a>
                 <DropdownMenu slot="list">
@@ -38,7 +39,7 @@
         <Select v-model="model1" style="width:200px" :transfer="true">
             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
-        <Button @click="instance('info')">Info</Button>
+        <Button @click="instance('confirm')">Info</Button>
     </div>
 </template>
 <script>
@@ -142,6 +143,9 @@
             handleSpinShow() {
                 this.$Spin.show();
             },
+            hidden() {
+                console.log('on - hidd');
+            },
             instance(type) {
                 const title = 'Title';
                 const content = '<p>Content of dialog</p><p>Content of dialog</p>';
@@ -168,6 +172,15 @@
                         this.$Modal.error({
                             title: title,
                             content: content
+                        });
+                        break;
+                    case 'confirm':
+                        this.$Modal.confirm({
+                            title: '123',
+                            content: content,
+                            render: h => {
+                                return h('Input');
+                            }
                         });
                         break;
                 }

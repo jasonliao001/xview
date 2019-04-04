@@ -4,9 +4,7 @@
             <template v-if="type === 'notice'">
                 <div :class="contentClasses" ref="content" v-html="content"></div>
                 <div :class="contentWithIcon">
-                    <render-cell
-                        :render="renderFunc"
-                    ></render-cell>
+                    <render-cell :render="renderFunc"></render-cell>
                 </div>
                 <a :class="[baseClass + '-close']" @click="close" v-if="closable">
                     <i class="ivu-icon ivu-icon-ios-close"></i>
@@ -16,9 +14,7 @@
                 <div :class="[baseClass + '-content']" ref="content">
                     <div :class="[baseClass + '-content-text']" v-html="content"></div>
                     <div :class="[baseClass + '-content-text']">
-                        <render-cell
-                            :render="renderFunc"
-                        ></render-cell>
+                        <render-cell :render="renderFunc"></render-cell>
                     </div>
                     <a :class="[baseClass + '-close']" @click="close" v-if="closable">
                         <i class="ivu-icon ivu-icon-ios-close"></i>
@@ -81,19 +77,19 @@
                 type: String
             }
         },
-        data () {
+        data() {
             return {
                 withDesc: false
             };
         },
         computed: {
-            baseClass () {
+            baseClass() {
                 return `${this.prefixCls}-notice`;
             },
-            renderFunc () {
-                return this.render || function () {};
+            renderFunc() {
+                return this.render || function() {};
             },
-            classes () {
+            classes() {
                 return [
                     this.baseClass,
                     {
@@ -103,43 +99,35 @@
                     }
                 ];
             },
-            contentClasses () {
-                return [
-                    `${this.baseClass}-content`,
-                    this.render !== undefined ? `${this.baseClass}-content-with-render` : ''
-                ];
+            contentClasses() {
+                return [`${this.baseClass}-content`, this.render !== undefined ? `${this.baseClass}-content-with-render` : ''];
             },
-            contentWithIcon () {
-                return [
-                    this.withIcon ? `${this.prefixCls}-content-with-icon` : '',
-                    !this.hasTitle && this.withIcon ? `${this.prefixCls}-content-with-render-notitle` : ''
-                ];
+            contentWithIcon() {
+                return [this.withIcon ? `${this.prefixCls}-content-with-icon` : '', !this.hasTitle && this.withIcon ? `${this.prefixCls}-content-with-render-notitle` : ''];
             },
-            messageClasses () {
-                return [
-                    `${this.baseClass}-content`,
-                    this.render !== undefined ? `${this.baseClass}-content-with-render` : ''
-                ];
+            messageClasses() {
+                return [`${this.baseClass}-content`, this.render !== undefined ? `${this.baseClass}-content-with-render` : ''];
             }
         },
         methods: {
-            clearCloseTimer () {
+            clearCloseTimer() {
                 if (this.closeTimer) {
                     clearTimeout(this.closeTimer);
                     this.closeTimer = null;
                 }
             },
-            close () {
+            close() {
                 this.clearCloseTimer();
                 this.onClose();
                 this.$parent.close(this.name);
             },
-            handleEnter (el) {
+            handleEnter(el) {
+                console.log(this.type);
                 if (this.type === 'message') {
                     el.style.height = el.scrollHeight + 'px';
                 }
             },
-            handleLeave (el) {
+            handleLeave(el) {
                 if (this.type === 'message') {
                     // 优化一下，如果当前只有一个 Message，则不使用 js 过渡动画，这样更优美
                     if (document.getElementsByClassName('ivu-message-notice').length !== 1) {
@@ -150,7 +138,7 @@
                 }
             }
         },
-        mounted () {
+        mounted() {
             this.clearCloseTimer();
 
             if (this.duration !== 0) {
@@ -162,10 +150,10 @@
             // check if with desc in Notice component
             if (this.prefixCls === 'ivu-notice') {
                 let desc = this.$refs.content.querySelectorAll(`.${this.prefixCls}-desc`)[0];
-                this.withDesc = this.render ? true : (desc ? desc.innerHTML !== '' : false);
+                this.withDesc = this.render ? true : desc ? desc.innerHTML !== '' : false;
             }
         },
-        beforeDestroy () {
+        beforeDestroy() {
             this.clearCloseTimer();
         }
     };

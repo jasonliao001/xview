@@ -59,12 +59,12 @@
             <!--},-->
             <!--handleUpdate () {-->
                 <!--const child = this.baseData[0].children[0].children[1];-->
-              <!--//  console.log(JSON.stringify(this.baseData), '\n', JSON.stringify(child));-->
+              <!--//  
                 <!--if (!child) return this.$Message.error('Node is async and is not loaded yet');-->
                 <!--else this.$set(child, 'checked', true);-->
             <!--},-->
             <!--logger (txt) {-->
-                <!--console.log(txt);-->
+                <!--
             <!--},-->
             <!--loadData (item, callback) {-->
                 <!--setTimeout(() => {-->
@@ -208,6 +208,8 @@
     <div>
         <Tree :data="data5" :render="renderContent"></Tree>
         <functional :list="list" v-bind="data" v-on="data.on"></functional>
+
+        <!-- <TreeV2 :data="data8"></TreeV2> -->
     </div>
 </template>
 <script>
@@ -220,17 +222,52 @@
                 data: {
                     class: 'red',
                     on: {
-                        click: e => {
-                            console.log(e);
-                        }
+                        click: e => {}
                     }
                 },
+                data8: [
+                    {
+                        label: 'A',
+                        children: [
+                            {
+                                label: 'A-1',
+                                children: [
+                                    {
+                                        label: 'A-1-1',
+                                        children: []
+                                    },
+                                    {
+                                        label: 'A-1-2',
+                                        children: []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        label: 'b',
+                        children: [
+                            {
+                                label: 'b-1',
+                                children: [
+                                    {
+                                        label: 'b-1-1',
+                                        children: []
+                                    },
+                                    {
+                                        label: 'b-1-2',
+                                        children: []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
                 data5: [
                     {
                         title: 'parent 1',
                         expand: true,
                         render: (h, { root, node, data }) => {
-                            console.log('render');
                             return h(
                                 'span',
                                 {
@@ -396,7 +433,6 @@
                 node.expand = !node.expand;
             },
             renderContent(h, { root, node, data }) {
-                console.log('renderContent');
                 return h(
                     'span',
                     {
@@ -464,9 +500,6 @@
                 this.$set(data, 'children', children);
             },
             remove(root, node, data) {
-                console.log('root :', root);
-                console.log('data :', data);
-                console.log('node :', node);
                 const parentKey = root.find(el => el === node).parent;
                 const parent = root.find(el => el.nodeKey === parentKey).node;
                 const index = parent.children.indexOf(data);

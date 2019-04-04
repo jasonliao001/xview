@@ -1,7 +1,6 @@
 import Modal from './confirm';
 
 let modalInstance;
-
 function getModalInstance(render = undefined) {
     modalInstance =
         modalInstance ||
@@ -18,7 +17,7 @@ function getModalInstance(render = undefined) {
 function confirm(options) {
     const render = 'render' in options ? options.render : undefined;
     let instance = getModalInstance(render);
-
+    console.log(instance);
     options.onRemove = function() {
         modalInstance = null;
     };
@@ -66,5 +65,4 @@ Modal.remove = function() {
 
     instance.remove();
 };
-
 export default Modal;

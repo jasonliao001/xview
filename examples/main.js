@@ -128,6 +128,10 @@ const router = new VueRouter({
         {
             path: '/table',
             component: resolve => require(['./routers/table.vue'], resolve)
+        },
+        {
+            path: '/cascader',
+            component: resolve => require(['./routers/cascader.vue'], resolve)
         }
     ]
 });

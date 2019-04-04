@@ -1,0 +1,46 @@
+ul,
+li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+.tree {
+  .tree-arrow {
+    display: inline-block;
+    width: 12px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    &-right {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      transition: all 0.2s ease-in-out;
+      &:after {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-left: -4px;
+        position: absolute;
+
+        transform: translate(-50%, -50%) rotate(45deg);
+        border-top: 2px solid currentColor;
+        border-right: 2px solid currentColor;
+        box-sizing: border-box;
+      }
+    }
+    &.tree-arrow-open {
+      i {
+        transform: rotate(90deg);
+      }
+    }
+  }
+  &-title {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  li ul {
+    padding-left: 20px;
+  }
+}
